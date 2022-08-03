@@ -52,13 +52,16 @@ class Router
 
     public function renderView($view, $params = [])
     {
-        $layoutContent = $this->layoutContent();
+        $layoutContent = $this->layoutContent($params);
         $viewContent = $this->renderOnlyView($view, $params);
         return str_replace('{{Content}}', $viewContent, $layoutContent);
     }
 
-    protected function layoutContent()
+    protected function layoutContent($params)
     {
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
         $layout = Application::$app->controller->layout;
         ob_start();
         include_once Application::$ROOT_DIR . "/views/layouts/$layout.php";

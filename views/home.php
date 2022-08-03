@@ -39,7 +39,7 @@
                             <div class="categories__text">
                                 <h4>Cosmetics</h4>
                                 <p>159 items</p>
-                                <a href="#">Shop now</a>
+                                <a href="#">همین الآن بخرید</a>
                             </div>
                         </div>
                     </div>
@@ -267,7 +267,7 @@
 
 <!-- Banner Section Begin -->
 <section class="banner set-bg" data-setbg="img/banner/banner-1.jpg">
-    <div class="container">
+    <div class="container" style="direction: ltr;">
         <div class="row">
             <div class="col-xl-7 col-lg-8 m-auto">
                 <div class="banner__slider owl-carousel">

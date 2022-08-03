@@ -8,6 +8,8 @@ use app\core\Response;
 use app\core\Controller;
 use app\core\Database;
 
+define("PUBLIC_PATH", dirname(__DIR__) . '/public');
+
 class Application
 {
     public static string $ROOT_DIR;

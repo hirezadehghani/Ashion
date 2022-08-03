@@ -11,8 +11,12 @@ class AuthController extends Controller
 {
     public function login()
     {
+        $params = [
+            'title'=> 'فروشگاه اینترنتی اشیون | صفحه ورود',
+            'type' => 'ورود'
+        ];
         $this->setLayout('auth');
-        return $this->render('login');
+        return $this->render('/admin/login', $params);
     }
 
     public function register(Request $request)

@@ -6,9 +6,10 @@
  */
 
 use app\controllers\AuthController;
-use app\core\Application;
 use app\controllers\SiteController;
 use Dotenv\Dotenv;
+use app\controllers\PanelController;
+use app\core\Application;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
@@ -33,5 +34,10 @@ $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
 
+
+$app->router->get('/panel', [PanelController::class, 'dashboard']);
+$app->router->get('/panel/addProduct', [PanelController::class, 'addProduct']);
+
+// $app->router->post('/#', [PanelController::class, 'panel']);
 
 $app->run();

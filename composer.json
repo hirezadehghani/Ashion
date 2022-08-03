@@ -5,7 +5,7 @@
     "license": "colorlib.com licence is available on copyright and is licenced by Reza Dehghani please contact with me on www.hireza.ir",
     "autoload": {
         "psr-4": {
-            "App\\": "./"
+            "app\\": "./"
         }
     },
     "authors": [
