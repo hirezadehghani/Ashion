@@ -13,7 +13,8 @@ class PanelController extends Controller
     {
         $params = [
             'title' => 'فروشگاه اینترنتی اشیون',
-            'pageTitle' => 'پیشخوان'
+            'pageTitle' => 'پیشخوان',
+            'dependencyAddr' => '/',
         ];
         $this->setlayout('admin');
         return $this->render('admin/panel', $params);
@@ -23,7 +24,8 @@ class PanelController extends Controller
     {
         $params = [
             'pageTitle' => 'اضافه کردن کالا',
-            'title' => 'فروشگاه اینترنتی اشیون'
+            'title' => 'فروشگاه اینترنتی اشیون',
+            'dependencyAddr' => '../',
         ];
         $this->setLayout('admin');
         return $this->render('admin/addProduct', $params);

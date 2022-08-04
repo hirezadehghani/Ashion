@@ -9,17 +9,16 @@
   <title><?= $params['title']; ?> | پنل مدیریت</title>
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>plugins/font-awesome/css/font-awesome.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
   <!-- bootstrap rtl -->
-  <link rel="stylesheet" href="dist/css/bootstrap-rtl.min.css">
+  <link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>dist/css/bootstrap-rtl.min.css">
   <!-- template rtl version -->
-  <link rel="stylesheet" href="dist/css/custom-style.css">
-
+  <link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>dist/css/custom-style.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -149,7 +148,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="/panel" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="<?= $params['dependencyAddr'] ?>dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">پنل مدیریت</span>
       </a>
 
@@ -181,7 +180,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="../admin/addProduct.php" class="nav-link active">
+                    <a href="../panel/addProduct" class="nav-link active">
                       <i class="fa fa-circle-o nav-icon"></i>
                       <p>اضافه کردن کالا</p>
                     </a>
@@ -267,11 +266,11 @@
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="<?= $params['dependencyAddr'] ?>plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= $params['dependencyAddr'] ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
+    <script src="<?= $params['dependencyAddr'] ?>dist/js/adminlte.min.js"></script>
 </body>
 
 </html>
