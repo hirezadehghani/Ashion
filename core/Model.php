@@ -11,7 +11,6 @@ abstract class Model
     public const RULES_MATCH = 'match';
     public const RULES_UNIQUE = 'unique';
 
-
     public function loadData($data)
     {
         foreach ($data as $key => $value) {
@@ -46,18 +45,18 @@ abstract class Model
                 if ($ruleName === self::RULES_MAX && strlen($value) > $rule['max']) {
                     $this->addError($attribute, self::RULES_MAX, $rule);
                 }
-                if ($ruleName === self::RULES_MATCH && $value !== $this->{$rule ['match']}) {
+                if ($ruleName === self::RULES_MATCH && $value !== $this->{$rule['match']}) {
                     $this->addError($attribute, self::RULES_MATCH, $rule);
                 }
-                if ($ruleName === self::RULES_UNIQUE)   {
+                if ($ruleName === self::RULES_UNIQUE) {
                     $className = $rule['class'];
                     $uniqueAttr = $rule['attribute'] ?? $attribute;
                     $tableName = $className::tableName();
-                    $statement = Application::$app->db->prepare("SELECT * $tableName WHERE $uniqueAttr = :$uniqueAttr");
-                    $statement->bindValue(":attr", $value);
+                    $statement = Application::$app->db->prepare("SELECT * from $tableName WHERE $uniqueAttr = :$uniqueAttr");
+                    $statement->bindValue(":$uniqueAttr", $value);
                     $statement->execute();
                     $record = $statement->fetchObject();
-                    if($record) {
+                    if ($record) {
                         $this->addError($attribute, self::RULES_UNIQUE, ['field' => $attribute]);
                     }
                 }
@@ -78,12 +77,12 @@ abstract class Model
     public function errorMessages()
     {
         return [
-            self::RULES_REQUIRED => 'This field is required',
-            self::RULES_EMAIL => 'This field must be valid email address',
-            self::RULES_MIN => 'Min length of this field must be {min}',
-            self::RULES_MAX => 'Max length of this field must be {max}',
-            self::RULES_MATCH => 'This field must be the same as {match}',
-            self::RULES_UNIQUE => 'Record with same email exists',
+            self::RULES_REQUIRED => 'این فیلد ضروری است! لطفا آن را تکمیل نمایید',
+            self::RULES_EMAIL => 'ایمیل وارد شده می بایست معتبر باشد مثل example@gmail.com',
+            self::RULES_MIN => 'حداقل طول فیلد {min} است',
+            self::RULES_MAX => 'حداکثر طول فیلد {max} است',
+            self::RULES_MATCH => 'این فیلد باید با فیلد {match} یکسان باشد',
+            self::RULES_UNIQUE => 'ایمیل مشابه ایمیل وارد شده قبلا در سامانه ثبت شده است',
         ];
     }
 
@@ -91,7 +90,29 @@ abstract class Model
     {
         return $this->errors[$attribute] ?? false;
     }
-    public function getFirstError($attribute)   {
+    public function getFirstError($attribute)
+    {
         return $this->errors[$attribute][0] ?? false;
+    }
+
+    public function saveToDb($tableName, $attributes)
+    {
+        $params = [];
+        $params = array_map(fn ($attr) => ":$attr", $attributes);
+        $statement = self::prepare(
+            "INSERT INTO $tableName (" . implode(',', $attributes) . ") 
+        VALUES (" . implode(',', $params) . ")"
+        );
+
+        foreach ($attributes as $attribute) {
+            $statement->bindValue(":$attribute", $this->{$attribute});
+        }
+        $statement->execute();
+        return true;
+    }
+
+    public function prepare($sql)
+    {
+        return Application::$app->db->pdo->prepare($sql);
     }
 }

@@ -21,22 +21,26 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
         $user = new user();
+        $params = [
+            'title'=> 'فروشگاه اینترنتی اشیون | صفحه ورود',
+            'type' => 'ورود',
+            'model' => $user
+        ];
+
         if ($request->isPost()) {
             $user->loadData($request->getBody());
-
+            
+            
             if($user->validate() && $user->save())    {
-                
                 Application::$app->response->redirect('/');
             }
-            return $this->render('register', [
-                'model' => $user
-            ]);
+            $this->setLayout('auth');
+            return $this->render('/admin/register',$params);
 
         }
         $this->setLayout('auth');
-        return $this->render('register', [
-            'model' => $user
-        ]);
+        return $this->render('/admin/register', $params);
     }
 }

@@ -55,11 +55,10 @@ create table if not exists product (
 
 create table if not exists user (
     id bigint not null AUTO_INCREMENT primary key,
-    username varchar(20) not null unique,
-    pass text not null,
-    first_name varchar(20) not null,
-    last_name varchar(20) not null,
-    telephone int(10) not null unique,
+    password text not null,
+    firstName varchar(20) not null,
+    lastName varchar(20) not null,
+    telephone varchar(11) not null unique,
     email varchar(30) not null unique,
     created_at datetime not null,
     modified_at datetime null DEFAULT null
@@ -80,14 +79,14 @@ create table if not exists cart_item (
     product_id bigint not null,
     quantity int not null,
     created_at datetime not null,
-    modified_at datetime null DEFAULT null,
+    modified_at datetime null DEFAULT null
 );
 
 create table if not exists order_details (
     id bigint not null AUTO_INCREMENT primary key,
     user_id bigint not null,
     total float not null,
-    peyment_id null,
+    peyment_id bigint null,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
     foreign key (user_id) references user(id),
@@ -98,8 +97,8 @@ create table if not exists peyment_details (
     id bigint not null AUTO_INCREMENT primary key,
     order_id bigint not null,
     amount int not null,
-    providers varchar not null,
-    stat boolean not null,
+    providers varchar(20) not null,
+    stat boolean,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
     foreign key (order_id) references order_details(id)
@@ -119,9 +118,9 @@ create table if not exists order_items (
 create table if not exists user_address (
     id bigint not null AUTO_INCREMENT primary key,
     address_line varchar(50) not null,
-    province varchar not null,
+    province varchar(20) not null,
     postal_code decimal not null,
-    city varchar not null,
+    city varchar(20) not null,
     telephone varchar(10),
     mobile varchar(10) not null
 );
@@ -129,8 +128,8 @@ create table if not exists user_address (
 create table if not exists user_payment (
     id bigint not null AUTO_INCREMENT primary key,
     user_id bigint not null,
-    peyment_type varchar not null,
-    providers varchar not null,
+    payment_type tinyint(4) not null,
+    providers varchar(20) not null,
     tracking_no int not null,
     expiry datetime,
     foreign key (user_id) references user(id)

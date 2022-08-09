@@ -3,6 +3,11 @@
 namespace app\core\form;
 
 use app\core\Model;
+use app\core\UserModel;
+use app\models\user;
+use app\models\Product;
+use app\core\ProductModel;
+use app\models\Category;
 
 class Form 
 {
@@ -15,7 +20,7 @@ class Form
         echo '</form>';
     }
 
-    public function field(Model $model, $attribute) {
-        return new Field($model, $attribute);
+    public function field(Model $model, $attribute, $placeHolder) {
+        return new Field($model, $attribute, $placeHolder);
     }
 }

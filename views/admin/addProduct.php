@@ -1,5 +1,6 @@
-<link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>plugins/colorpicker/css/bootstrap-colorpicker.min.css">
-
+<script src="<?= $params['dependencyAddr'] ?>plugins/jquery/jquery.min.js"></script>
+<script src="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.min.js"></script>
+<link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.css">
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -9,15 +10,15 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">مثال ساده</h3>
+                        <h3 class="card-title">افزودن کالا</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form action="upload.php" method="post" role="form" enctype="multipart/form-data">
-                        <div class="card-body">
+                    <form action="" method="post" role="form" enctype="multipart/form-data">
+                    <div class="card-body">
                             <div class="form-group">
-                                <label for="productName">نام</label>
-                                <input name="productName" type="text" value="" class="form-control" placeholder="نام کالا را وارد کنید">
+                                <label for="title">نام</label>
+                                <input name="title" type="text" value="" class="form-control" placeholder="نام کالا را وارد کنید">
                             </div>
                             <div class="form-group">
                                 <label for="productCategory">دسته بندی</label>
@@ -33,35 +34,56 @@
                                 <label for="productPrice">قیمت</label>
                                 <input type="number" name="productPrice" value="" placeholder="15000000" class="form-control">
                             </div>
+                            <div class="form-group">
+                                <label for="productsStockPrice">قیمت کالای دست دوم</label>
+                                <input id="productsStockPrice" type="number" name="productsStockPrice" value="" placeholder="1200000" class="form-control">
+                            </div>
 
                             <div class="form-group">
                                 <label for="productDiscount">تخفیف</label>
                                 <input id="productDiscount" type="number" min="1" max="100" name="productDiscount" value="" placeholder="20" class="form-control">
                             </div>
 
-                            <!-- for Product discount -->
-                            <script>
-                                document.getElementById('addProductForm').onsubmit = function() {
-                                    var productDiscount = document.getElementById('productDiscount').value / 100;
-                                }
-                            </script>
+                            <div class="form-group">
+                                <input type="text" id="demo" class="demo" value="#ff6161">
+                                <script>
+                                    $('.demo').minicolors();
+                                </script>
+                            </div>
 
-                            <!-- <div class="form-group">
-                                <label>انتخاب رنگ</label>
-                                <div class="input-group my-colorpicker2">
-                                    <input name="color" type="text" class="form-control">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-square"></i></span>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <textarea id="editor" class="textarea" placeholder="لطفا متن خود را وارد کنید" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                            </div>
 
-                            </div> -->
+                            <div class="form-group">
+                                <label for="productSku">کد SKU</label>
+                                <input name="productSku" type="text" value="" class="form-control" placeholder="کد SKU کالا را وارد کنید">
+                            </div>
 
-                            <div class="input-group my-colorpicker2 colorpicker-element" data-colorpicker-id="2">
-                                <input type="text" class="form-control" data-original-title="" title="">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
-                                </div>
+                            <div class="form-group">
+                                <span>اندازه</span></br>
+                                <label for="xxs">XXS</label>
+                                <input class="form-control" type="number" name="xxs">
+                                <label for="xs">XS</label>
+                                <input class="form-control" type="number" name="xs">
+                                <label for="s">S</label>
+                                <input class="form-control" type="number" name="xxs">
+                                <label for="m">M</label>
+                                <input class="form-control" type="number" name="m">
+                                <label for="l">L</label>
+                                <input class="form-control" type="number" name="l">
+                                <label for="xl">l</label>
+                                <input class="form-control" type="number" name="xl">
+                                <label for="xxl">XXL</label>
+                                <input class="form-control" type="number" name="xxl">
+                                <label for="xxl">XXL</label>
+                                <input class="form-control" type="number" name="xxl">
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPromotions">مزایا</label>
+                                <input type="text" id="productPromotions" class="form-control">
                             </div>
 
                             <div class="form-group">
@@ -86,43 +108,21 @@
     </div>
 </section>
 
-
-<script src="<?= $params['dependencyAddr']?>plugins/jquery/jquery.min.js"</script>
-<script src="<?= $params['dependencyAddr'] ?>plugins/colorpicker/js/bootstrap-colorpicker.min.js"></script>
-
+<script src="<?= $params['dependencyAddr'] ?>plugins/ckeditor/ckeditor.js"></script>
 <script>
-
-    // //color picker with addon
-    // $('.my-colorpicker2').colorpicker()
-
-    // $('.my-colorpicker2').on('colorpickerChange', function(event) {
-    //     $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-    // })
-
-    $(document).ready(function () {
-            $.fn.extend({
-                ColorPicker: MyColorPicker.init,
-                ColorPickerHide: MyColorPicker.hidePicker,
-                ColorPickerShow: MyColorPicker.showPicker,
-                ColorPickerSetColor: MyColorPicker.setColor
-            });
-            $('.my-colorpicker2').ColorPicker({
-                color: '#000',
-                onShow: function (colpkr) {
-                    $(colpkr).fadeIn(500);
-                    return false;
-                },
-                onHide: function (colpkr) {
-                    $(colpkr).fadeOut(500);
-                    return false;
-                },
-                onChange: function (hsb, hex, rgb) {
-                    $('#colorSelector').css('backgroundColor', '#' + hex);
-                }
-            });
-            //            $('#<%=txtReserveType.ClientID %>')
-        });
-
-    </script>
-
+    $(function() {
+        // Replace the <textarea id="editor"> with a CKEditor
+        // instance, using default configuration.
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(function(editor) {
+                // The editor instance
+            })
+            .catch(function(error) {
+                console.error(error)
+            })
+    });
+    document.getElementById('addProductForm').onsubmit = function() {
+        var productDiscount = document.getElementById('productDiscount').value / 100;
+    }
 </script>

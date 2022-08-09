@@ -65,7 +65,8 @@
                 <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 ml-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
-                    حسام موسوی
+                    <?php 
+                    ?>
                     <span class="float-left text-sm text-danger"><i class="fa fa-star"></i></span>
                   </h3>
                   <p class="text-sm">با من تماس بگیر لطفا...</p>
@@ -161,7 +162,19 @@
               <img src="https://www.gravatar.com/avatar/52f0fbcbedee04a121cba8dad1174462?s=200&d=mm&r=g" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-              <a href="#" class="d-block">حسام موسوی</a>
+              <a href="#" class="d-block">
+              <?php
+                    use app\core\Application;
+                    use app\models\User;
+                    $user = new User();
+                    $statement = Application::$app->db->prepare("select * from user where telephone = :telephone");
+                    $statement->bindValue(":telephone", '09000000000');
+                    $statement->execute();
+                    $statement = $statement->fetchObject();
+                    $user = new User($statement);
+                    echo $user->getDisplayName();
+                    ?>
+              </a>
             </div>
           </div>
 
@@ -183,6 +196,18 @@
                     <a href="../panel/addProduct" class="nav-link active">
                       <i class="fa fa-circle-o nav-icon"></i>
                       <p>اضافه کردن کالا</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="../panel/productCategory" class="nav-link active">
+                      <i class="fa fa-circle-o nav-icon"></i>
+                      <p>دسته بندی</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="../panel/productInventory" class="nav-link active">
+                      <i class="fa fa-circle-o nav-icon"></i>
+                      <p>موجودی</p>
                     </a>
                   </li>
                   <li class="nav-item">
