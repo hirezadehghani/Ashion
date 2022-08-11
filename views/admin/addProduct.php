@@ -14,93 +14,69 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form action="" method="post" role="form" enctype="multipart/form-data">
+                    <?php
+                    use app\models\Category;
+                    $form = app\core\form\Form::hasUpload('', 'post'); ?>
                     <div class="card-body">
-                            <div class="form-group">
-                                <label for="title">نام</label>
-                                <input name="title" type="text" value="" class="form-control" placeholder="نام کالا را وارد کنید">
-                            </div>
-                            <div class="form-group">
-                                <label for="productCategory">دسته بندی</label>
-                                <select name="productCategory" value="" class="form-control">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="productInventory">موجودی</label>
-                                <input type="number" value="" name="productInventory" class="form-control" placeholder="موجودی کالا به عدد">
-                            </div>
-                            <div class="form-group">
-                                <label for="productPrice">قیمت</label>
-                                <input type="number" name="productPrice" value="" placeholder="15000000" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="productsStockPrice">قیمت کالای دست دوم</label>
-                                <input id="productsStockPrice" type="number" name="productsStockPrice" value="" placeholder="1200000" class="form-control">
-                            </div>
+                        <?= $form->field($model, 'text', 'title', 'نام کالا'); ?>
+                        <div class="form-group">
+                            <label for="productCategory">دسته بندی</label>
+                            <select name="productCategory" value="" class="form-control">
+                                <?php $category = new Category;
+                                $data = $category->fetchTitle('title');
+                                foreach ($data as $row) { ?>
+                                    <option value=""><?= $row['title'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <?= $form->field($model, 'number', 'inventory_id',  'موجودی کالا'); ?>
+                        <?= $form->field($model, 'number', 'price', 'قیمت'); ?>
+                        <?= $form->field($model, 'number', 'stockprice', 'قیمت کالای دست دوم'); ?>
+                        <?= $form->field($model, 'number', 'discount', 'تخفیف'); ?>
 
-                            <div class="form-group">
-                                <label for="productDiscount">تخفیف</label>
-                                <input id="productDiscount" type="number" min="1" max="100" name="productDiscount" value="" placeholder="20" class="form-control">
+                        <div class="form-group">
+                            <input id="color" class="demo" value="#000">
+                            <script>
+                                $('.demo').minicolors();
+                            </script>
+                            <a id="takeColor" class="btn btn-primary" onclick="takeColor()">اضافه کردن رنگ</a>
+                            <hr><div id="colorList">
                             </div>
+                            <input id="colorName" name="color">
+                        </div>
 
-                            <div class="form-group">
-                                <input type="text" id="demo" class="demo" value="#ff6161">
-                                <script>
-                                    $('.demo').minicolors();
-                                </script>
-                            </div>
+                        <div class="form-group">
+                            <textarea name="detail" id="editor" class="textarea" placeholder="لطفا متن خود را وارد کنید" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                        </div>
 
-                            <div class="form-group">
-                                <textarea id="editor" class="textarea" placeholder="لطفا متن خود را وارد کنید" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                            </div>
+                        <?= $form->field($model, 'number', 'sku', 'کد sku'); ?>
 
-                            <div class="form-group">
-                                <label for="productSku">کد SKU</label>
-                                <input name="productSku" type="text" value="" class="form-control" placeholder="کد SKU کالا را وارد کنید">
-                            </div>
-
-                            <div class="form-group">
-                                <span>اندازه</span></br>
-                                <label for="xxs">XXS</label>
-                                <input class="form-control" type="number" name="xxs">
-                                <label for="xs">XS</label>
-                                <input class="form-control" type="number" name="xs">
-                                <label for="s">S</label>
-                                <input class="form-control" type="number" name="xxs">
-                                <label for="m">M</label>
-                                <input class="form-control" type="number" name="m">
-                                <label for="l">L</label>
-                                <input class="form-control" type="number" name="l">
-                                <label for="xl">l</label>
-                                <input class="form-control" type="number" name="xl">
-                                <label for="xxl">XXL</label>
-                                <input class="form-control" type="number" name="xxl">
-                                <label for="xxl">XXL</label>
-                                <input class="form-control" type="number" name="xxl">
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="productPromotions">مزایا</label>
-                                <input type="text" id="productPromotions" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="productImage">ارسال تصویر(ها)</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" multiple class="custom-file-input" id="productImage" name="productImage">
-                                        <label class="custom-file-label" for="productImage">ارسال تصویر(ها)</label>
-                                    </div>
+                        <div class="form-group">
+                            <span>موجودی اندازه ها</span></br>
+                            <?= $form->field($model, 'number', 'xxs', 'xxs'); ?>
+                            <?= $form->field($model, 'number', 'xs', 'xs'); ?>
+                            <?= $form->field($model, 'number', 's', 's'); ?>
+                            <?= $form->field($model, 'number', 'm', 'm'); ?>
+                            <?= $form->field($model, 'number', 'l', 'L'); ?>
+                            <?= $form->field($model, 'number', 'xl', 'xL'); ?>
+                            <?= $form->field($model, 'number', 'xxl', 'xxL'); ?>
+                        </div>
+                        <?= $form->field($model, 'text', 'promotions', 'مزایا'); ?>
+                        <div class="form-group">
+                            <label for="productImage">ارسال تصویر(ها)</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" multiple class="custom-file-input" id="productImage" name="productImage">
+                                    <label class="custom-file-label" for="productImage">ارسال تصویر(ها)</label>
                                 </div>
                             </div>
-
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">ارسال</button>
-                            </div>
-
                         </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">ارسال</button>
+                        </div>
+
+                    </div>
                     </form>
                 </div>
             </div>
@@ -122,7 +98,33 @@
                 console.error(error)
             })
     });
-    document.getElementById('addProductForm').onsubmit = function() {
-        var productDiscount = document.getElementById('productDiscount').value / 100;
+    let colors = new Array();
+
+    function takeColor() {
+        notequal = null;
+        var colorValue = document.getElementById("color").value;
+        for (let i = 0; i < colors.length; i++) {
+            if (colors[i] != colorValue)
+                notequal = 1;
+            else
+                notequal = 0;
+        }
+        if (notequal == 1 || notequal == null)
+            colors.push(colorValue);
+        
+        var colorList = '';
+        colors.forEach(showColorfunc);
+
+        function showColorfunc(value) {
+            colorList +=
+                "<span style=\"background-color:" + value + "\">"+"value"+"</span>"
+        }
+        document.getElementById("colorList").innerHTML = colorList;
     }
+
+    const form = document.getElementById("phpForm");
+    form.addEventListener(onsubmit, setColorValue);
+    function setColorValue(){
+        document.getElementById("colorName").value = 'test';
+    };
 </script>

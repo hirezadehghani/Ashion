@@ -17,16 +17,16 @@ create table if not exists product_inventory (
     deleted_at datetime null DEFAULT null
 );
 
-create table if not exists discount (
-    id bigint not null primary key AUTO_INCREMENT,
-    title varchar(75) not null unique,
-    detail text null,
-    descount_percent decimal not null,
-    active boolean not null DEFAULT 1,
-    created_at datetime not null,
-    modified_at datetime null DEFAULT null,
-    deleted_at datetime null DEFAULT null
-);
+    create table if not exists discount (
+        id bigint not null primary key AUTO_INCREMENT,
+        title varchar(75) not null unique,
+        detail text null,
+        discount_percent decimal not null,
+        active boolean not null,
+        created_at datetime not null,
+        modified_at datetime null DEFAULT null,
+        deleted_at datetime null DEFAULT null
+    );
 
 create table if not exists product (
     id bigint not null AUTO_INCREMENT PRIMARY KEY,

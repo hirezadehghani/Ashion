@@ -37,13 +37,11 @@ $app->router->post('/register', [AuthController::class, 'register']);
 //Product managment
 $app->router->get('/panel', [PanelController::class, 'dashboard']);
 $app->router->get('/panel/addProduct', [PanelController::class, 'addProduct']);
-$app->router->post('/panel/addProduct', [PanelController::class, 'saveProduct']);
+$app->router->post('/panel/addProduct', [PanelController::class, 'addProduct']);
 $app->router->get('/panel/productCategory', [PanelController::class, 'productCategory']);
 $app->router->post('/panel/productCategory', [PanelController::class, 'productCategory']);
-$app->router->get('/panel/productInventory', [PanelController::class, 'productInventory']);
-$app->router->post('/panel/productInventory', [PanelController::class, 'productInventory']);
+$app->router->get('/panel/discount', [PanelController::class, 'productDiscount']);
+$app->router->post('/panel/discount', [PanelController::class, 'productDiscount']);
 
-
-// $app->router->post('/#', [PanelController::class, 'panel']);
 
 $app->run();

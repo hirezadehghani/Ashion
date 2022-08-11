@@ -10,6 +10,8 @@ abstract class Model
     public const RULES_MAX = 'max';
     public const RULES_MATCH = 'match';
     public const RULES_UNIQUE = 'unique';
+    public const RULES_MINVALUE = 'minValue';
+    public const RULES_MAXVALUE = 'maxvalue';
 
     public function loadData($data)
     {
@@ -44,6 +46,12 @@ abstract class Model
                 }
                 if ($ruleName === self::RULES_MAX && strlen($value) > $rule['max']) {
                     $this->addError($attribute, self::RULES_MAX, $rule);
+                }
+                if($ruleName === self::RULES_MINVALUE && $value < $rule['min']) {
+                    $this->addError($attribute, self::RULES_MINVALUE, $rule);
+                }
+                if($ruleName === self::RULES_MAXVALUE && $value > $rule['max']) {
+                    $this->addError($attribute, self::RULES_MAXVALUE, $rule);
                 }
                 if ($ruleName === self::RULES_MATCH && $value !== $this->{$rule['match']}) {
                     $this->addError($attribute, self::RULES_MATCH, $rule);
@@ -82,7 +90,9 @@ abstract class Model
             self::RULES_MIN => 'حداقل طول فیلد {min} است',
             self::RULES_MAX => 'حداکثر طول فیلد {max} است',
             self::RULES_MATCH => 'این فیلد باید با فیلد {match} یکسان باشد',
-            self::RULES_UNIQUE => 'ایمیل مشابه ایمیل وارد شده قبلا در سامانه ثبت شده است',
+            self::RULES_UNIQUE => 'اطلاعات وارد شده تکراری می باشد',
+            self::RULES_MINVALUE => 'عدد وارد شده باید بیشتر یا مساوی {min} باشد',
+            self::RULES_MAXVALUE => 'عدد وارد شده باید کمتر یا مساوی {max} باشد'
         ];
     }
 
@@ -114,5 +124,13 @@ abstract class Model
     public function prepare($sql)
     {
         return Application::$app->db->pdo->prepare($sql);
+    }
+
+    public function fetchFromDb($tableName, $param)  {
+        $statement = self::prepare(
+            "SELECT $param from $tableName"
+        );
+        $statement->execute();
+        return $statement->fetchAll();
     }
 }

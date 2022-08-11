@@ -205,9 +205,9 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="../panel/productInventory" class="nav-link active">
+                    <a href="../panel/discount" class="nav-link active">
                       <i class="fa fa-circle-o nav-icon"></i>
-                      <p>موجودی</p>
+                      <p>تخفیف</p>
                     </a>
                   </li>
                   <li class="nav-item">

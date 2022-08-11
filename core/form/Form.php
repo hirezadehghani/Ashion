@@ -20,7 +20,12 @@ class Form
         echo '</form>';
     }
 
-    public function field(Model $model, $attribute, $placeHolder) {
-        return new Field($model, $attribute, $placeHolder);
+    public function field(Model $model, $type, $attribute, $placeHolder) {
+        return new Field($model, $type, $attribute, $placeHolder);
+    }
+
+    public static function hasUpload($action, $method) {
+        echo sprintf('<form action="%s" method="%s" enctype="multipart/form-data" id="phpForm">', $action, $method);
+        return new Form();
     }
 }

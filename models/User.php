@@ -59,12 +59,12 @@ class User extends Model
             'lastName' => [self::RULES_REQUIRED],
             'telephone' => [self::RULES_REQUIRED, [
                 self::RULES_UNIQUE, 'class' => self::class
-            ], [self::RULES_MIN, 'min' => 11], [self::RULES_MIN, 'max' => 11]],
+            ], [self::RULES_MIN, 'min' => 11], [self::RULES_MAX, 'max' => 11]],
             'email' => [self::RULES_REQUIRED, self::RULES_EMAIL, [
                 self::RULES_UNIQUE, 'class' => self::class
             ]],
             'password' => [self::RULES_REQUIRED, [self::RULES_MIN, 'min' => 8]],
-            'passwordConfirm' => [[self::RULES_MATCH, 'match' => 'password']],
+            'passwordConfirm' => [[self::RULES_MATCH, 'match' => 'رمز عبور']],
         ];
     }
 

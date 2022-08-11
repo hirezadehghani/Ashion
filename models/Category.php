@@ -13,7 +13,6 @@ class Category extends Model
     public string $title = '';
     public string $detail = '';
 
-
     public function tableName(): string
     {
         return 'product_category';
@@ -48,5 +47,8 @@ class Category extends Model
     public function save()
     {
         parent::saveToDb($this->tableName(), $this->attributes());
+    }
+    public function fetchTitle($param)  {
+        return parent::fetchFromDb($this->tableName(), $param);
     }
 }

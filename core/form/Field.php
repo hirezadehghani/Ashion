@@ -13,14 +13,16 @@ class Field
     public const TYPE_TEXT = 'text';
     public const TYPE_PASSWORD = 'password';
     public const TYPE_NUMBER = 'number';
+    public const TYPE_CHECK = 'checkbox';
+    public const TYPE_RADIO = 'radio';
 
     public string $type;
     public Model $model;
     public string $attribute;
     public string $placeHolder;
 
-    public function __construct(\app\core\Model $model, string $attribute, string $placeHolder)  {
-        $this->type = self::TYPE_TEXT;
+    public function __construct(\app\core\Model $model, string $type, string $attribute, string $placeHolder)  {
+        $this->type = $type;
         $this->model = $model;
         $this->attribute = $attribute;
         $this->placeHolder= $placeHolder;
@@ -48,6 +50,16 @@ class Field
 
     public function passwordField() {
         $this->type = self::TYPE_PASSWORD;
+        return $this;
+    }
+
+    public function checkField()    {
+        $this->type = self::TYPE_CHECK;
+        return $this;
+    }
+
+    public function radioField()    {
+        $this->type = self::TYPE_RADIO;
         return $this;
     }
 }

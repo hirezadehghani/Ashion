@@ -7,7 +7,7 @@ use app\core\Application;
 use app\models\product;
 use app\core\Request;
 use app\models\Category;
-use app\models\Inventory;
+use app\models\Discount;
 
 class PanelController extends Controller
 {
@@ -22,40 +22,29 @@ class PanelController extends Controller
         return $this->render('admin/panel', $params);
     }
 
-    public function addProduct()
-    {
+    public function addProduct(Request $request)    {
+        $product = new Product();
+
         $params = [
             'pageTitle' => 'اضافه کردن کالا',
             'title' => 'فروشگاه اینترنتی اشیون',
             'dependencyAddr' => '../',
+            'model' => $product
         ];
-        $this->setLayout('admin');
-        return $this->render('admin/addProduct', $params);
-    }
 
-    public function saveProduct(Request $request)
-    {
-        $product = new Product();
             if ($request->isPost()) {
                 $product->loadData($request->getBody());
-                
+                var_dump($request->getBody());
+                exit;
                 if($product->validate() && $product->save())    {
-                    Application::$app->response->redirect('/admin/panel');
+                    Application::$app->response->redirect('/panel/addProduct');
                 }
                 $this->setLayout('admin');
-                $params = [
-                    'pageTitle' => 'اضافه کردن کالا',
-                    'title' => 'فروشگاه اینترنتی اشیون',
-                    'dependencyAddr' => '../',
-                    'model' => $product
-                ];
                 return $this->render('/admin/addProduct',$params);
     
             }
             $this->setLayout('admin');
-            return $this->render('admin/panel', [
-                'model' => $product
-            ]);
+            return $this->render('admin/addProduct', $params);
     }
 
     public function productCategory(Request $request)  {
@@ -75,45 +64,32 @@ class PanelController extends Controller
                 Application::$app->response->redirect('/panel/productCategory');
             }
             $this->setLayout('admin');
-            $params = [
-                'pageTitle' => 'افزودن دسته بندی',
-                'title' => 'فروشگاه اینترنتی اشیون',
-                'dependencyAddr' => '../',
-                'model' => $category
-            ];
             return $this->render('/admin/addCategory',$params);
         }
         $this->setLayout('admin');
         return $this->render('admin/addCategory',$params);
     }
 
-    public function productInventory(Request $request)  {
-        $inventory = new Inventory();
+    public function productDiscount(Request $request)  {
+        $discount = new Discount();
 
         $params = [
-            'pageTitle' => 'افزودن موجودی',
+            'pageTitle' => 'افزودن تخفیف',
             'title' => 'فروشگاه اینترنتی اشیون',
             'dependencyAddr' => '../',
-            'model' => $inventory
+            'model' => $discount
         ];
 
         if ($request->isPost()) {
-            $inventory->loadData($request->getBody());
-            
-            if($inventory->validate() && $inventory->save())    {
-                Application::$app->response->redirect('/panel/productinventory');
+            $discount->loadData($request->getBody());
+            if($discount->validate() && $discount->save())    {
+                Application::$app->response->redirect('/panel/discount');
             }
             $this->setLayout('admin');
-            $params = [
-                'pageTitle' => 'افزودن دسته بندی',
-                'title' => 'فروشگاه اینترنتی اشیون',
-                'dependencyAddr' => '../',
-                'model' => $inventory
-            ];
-            return $this->render('/admin/addinventory',$params);
+            return $this->render('/admin/discount',$params);
         }
         $this->setLayout('admin');
-        return $this->render('admin/addinventory',$params);
+        return $this->render('admin/discount',$params);
     }
 
 

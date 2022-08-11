@@ -3,11 +3,7 @@
 declare(strict_types=1);
 
 namespace app\models;
-
-use app\core\Application;
-use app\core\DbModel;
 use app\core\Model;
-use app\core\ProductModel;
 
 class Product extends Model
 {
@@ -18,7 +14,7 @@ class Product extends Model
     public string $price = '';
     public string $inventory = '';
     public string $stockprice = '';
-    public array $color = [];
+    public string $color = '';
     public array $size = [];
     public string $promotions = '';
     public array $availableColor = [];
@@ -26,7 +22,7 @@ class Product extends Model
     public int $ranking = 0;
     public array $pictures = [];
     public array $category = [];
-    public array $discount = [];
+    public string $discount = '';
 
     public function tableName(): string
     {
