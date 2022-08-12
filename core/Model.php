@@ -126,11 +126,29 @@ abstract class Model
         return Application::$app->db->pdo->prepare($sql);
     }
 
-    public function fetchFromDb($tableName, $param)  {
+    public function fetchItem($tableName, $param)  {
         $statement = self::prepare(
             "SELECT $param from $tableName"
         );
         $statement->execute();
         return $statement->fetchAll();
+    }
+    
+
+    public function fetchGroup($tableName, $params)  {
+        $statement = self::prepare(
+            "SELECT " . implode(',', $params). " from $tableName"
+        );
+       
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    public function fetchAll($tableName)    {
+        $stmt = self::prepare(
+            "SELECT * from $tableName"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }

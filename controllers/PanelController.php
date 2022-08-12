@@ -34,8 +34,6 @@ class PanelController extends Controller
 
             if ($request->isPost()) {
                 $product->loadData($request->getBody());
-                var_dump($request->getBody());
-                exit;
                 if($product->validate() && $product->save())    {
                     Application::$app->response->redirect('/panel/addProduct');
                 }

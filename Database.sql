@@ -11,7 +11,7 @@ create table if not exists product_category(
 
 create table if not exists product_inventory (
     id bigint not null primary key AUTO_INCREMENT,
-    quantity int not null DEFAULT 0,
+    quantity json not null,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
     deleted_at datetime null DEFAULT null

@@ -48,7 +48,4 @@ class Category extends Model
     {
         parent::saveToDb($this->tableName(), $this->attributes());
     }
-    public function fetchTitle($param)  {
-        return parent::fetchFromDb($this->tableName(), $param);
-    }
 }

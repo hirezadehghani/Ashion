@@ -17,8 +17,8 @@
                     <!-- form start -->
 
                     <div class="card-body">
-                        <?= $form->field($model, 'title', 'عنوان دسته بندی'); ?>
-                        <?= $form->field($model, 'detail', 'جزئیات دسته بندی'); ?>
+                        <?= $form->field($model, 'title', 'text', 'عنوان دسته بندی'); ?>
+                        <?= $form->field($model, 'detail', 'text', 'جزئیات دسته بندی'); ?>
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">ذخیره</button>
