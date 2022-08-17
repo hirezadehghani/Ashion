@@ -1,14 +1,19 @@
 <script src="<?= $params['dependencyAddr'] ?>plugins/jquery/jquery.min.js"></script>
-<script src="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.min.js"></script>
-<link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.css">
 <script src="<?= $params['dependencyAddr'] ?>plugins/select2/select2.min.js"></script>
 <link href="<?= $params['dependencyAddr'] ?>plugins/select2/select2.min.css" rel="stylesheet" />
 <!-- Main content -->
+<?php
+
+use app\models\Category;
+use app\models\Discount;
+use app\models\product_attributes;
+
+?>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <!-- left column -->
-            <div class="col-md-6">
+            <!-- Right Coloumn -->
+            <div class="col-md-8">
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
@@ -17,13 +22,19 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <?php
-
-                    use app\models\Category;
-                    use app\models\Discount;
-
                     $form = app\core\form\Form::hasUpload('', 'post'); ?>
                     <div class="card-body">
                         <?= $form->field($model, 'text', 'title', 'نام کالا'); ?>
+
+                        <div class="form-group">
+                            <label for="editor">توضیحات</label>
+                            <textarea name="detail" id="editor" class="textarea" placeholder="لطفا متن خود را وارد کنید" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                        </div>
+                        <?= $form->field($model, 'number', 'sku', 'کد sku'); ?>
+                        <?= $form->field($model, 'text', 'promotions', 'مزایا'); ?>
+                        <?= $form->field($model, 'number', 'regular_price', 'قیمت واقعی'); ?>
+                        <?= $form->field($model, 'number', 'sale_price', 'قیمت فروش'); ?>
+
                         <div class="form-group">
                             <label for="productCategory">دسته بندی</label>
                             <select id="productCategory" name="category_id" class="form-control">
@@ -34,88 +45,17 @@
                                 <?php } ?>
                             </select>
                         </div>
-
-                        <div id="inventories">
-                            <div class="form-group">
-                                <label for="newInventory">موجودی</label>
-                                <input type="number" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="stockInventory">موجودی کالا دست دوم</label>
-                                <input type="number" class="form-control">
-                                <input type="text" name="inventory_id" id="inventory" hidden>
-                            </div>
-                        </div>
-
-                        <?= $form->field($model, 'number', 'price', 'قیمت'); ?>
-                        <?= $form->field($model, 'number', 'stock_price', 'قیمت کالای دست دوم'); ?>
+                        <!-- /.Category -->
 
                         <div class="form-group">
-                            <label for="productDiscount">تخفیف</label>
-                            <select id="productDiscount" name="discount_id" class="form-control">
-                            <option value="">بدون تخفیف</option>
-                                <?php $discount = new Discount;
-                                $data = $discount->fetchAll('discount');
-                                foreach ($data as $row) { 
-                                    if($row['active'] == 2) $disabled = true;
-                                    ?>
-                                    <option <?php if ($disabled == true) {$disabled = false; echo "disabled";} ?> value="<?= $row['id'] ?>"><?= $row['title'] ?></option>
-                                <?php } ?>
+                            <label for="stockSelect">وضعیت انبارداری</label>
+                            <select name="stock_id" id="stockSelect" class="form-control">
+                            <option value="1">در انبار</option>
+                            <option value="2">خارج از انبار</option>
+                            <option value="3">بازگشت سفارش</option>
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <input id="color" class="demo" value="#000">
-                            <script>
-                                $('.demo').minicolors();
-                            </script>
-                            <a id="takeColor" class="btn btn-primary" onclick="takeColor()">اضافه کردن رنگ</a>
-                            <hr>
-                            <div id="colorList">
-                            </div>
-                            <input id="colorName" name="color" hidden>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea name="detail" id="editor" class="textarea" placeholder="لطفا متن خود را وارد کنید" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                        </div>
-
-                        <?= $form->field($model, 'number', 'sku', 'کد sku'); ?>
-
-                        <div id="sizes">
-                            <label>موجودی اندازه ها</label>
-                            <hr>
-                            <label for="xxs">XXS</label>
-                            <input type="number" id="xxs" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">XS</label>
-                            <input type="number" id="xs" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">S</label>
-                            <input type="number" id="s" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">M</label>
-                            <input type="number" id="m" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">L</label>
-                            <input type="number" id="l" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">XL</label>
-                            <input type="number" id="xl" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="xxs">XXL</label>
-                            <input type="number" id="xxl" class="form-control col-2">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="size" id="sizeValues" hidden>
-                        </div>
-                        <?= $form->field($model, 'text', 'promotions', 'مزایا'); ?>
+                        <!-- /. Stock -->
                         <div class=" form-group">
                             <label for="productImage">ارسال تصویر(ها)</label>
                             <div class="input-group">
@@ -133,8 +73,60 @@
                     </div>
                     </form>
                 </div>
+
+
+
+            </div>
+            <!-- left column -->
+            <div class="col-md-4">
+
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">جزئیات</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- continue of product form -->
+                        <div class="form-group">
+                            <p for="productCategory">وابستگی ها</p>
+                            <label for="attributeSelect">انتخاب مشخصه</label>
+                            <select class="form-group custom-select" multiple name="attribute_id[]" id="attributeSelect">
+                                <?php $productAttributes = new product_attributes;
+                                $lastAttributes = $productAttributes->fetchGroup("product_attributes", ["attribute_name", "attribute_id"]);
+                                foreach ($lastAttributes as $row) {
+                                ?>
+                                    <option value="<?= $row['attribute_id'] ?>"><?= $row['attribute_name'] ?></option>
+                                <?php } ?>
+                            </select>
+
+                            <button id="getAttributes" class="btn btn-danger">ذخیره مشخصه ها برای محصول</button>
+
+                            <?php $attrs = [];
+                            // $attrs_vals = $product_attributes->fetchAll("attribute_values");
+                            foreach ($attrs_vals as $row) {
+                                foreach ($attrs as $attr) {
+                                    if ($row['attribute_id'] == $attr) {
+                            ?>
+                                        <select name="value_id" id="">
+                                            <option value="<?= $row['value_id'] ?>">
+                                                <?= $row['value_name'] ?>
+                                            </option>
+                                        </select>
+                            <?php }
+                                }
+                            } ?>
+                            <?php $values = $productAttributes->fetchAll("attribute_values");
+                            foreach ($values as $value) {
+                            ?>
+
+                            <?php
+                            } ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
 </section>
 
@@ -156,55 +148,4 @@
         //select 2 function
         // $('.select2').select2();
     });
-
-    let colors = new Array();
-
-    function takeColor() {
-        notequal = null;
-        var colorValue = document.getElementById("color").value;
-        for (let i = 0; i < colors.length; i++) {
-            if (colors[i] != colorValue)
-                notequal = 1;
-            else
-                notequal = 0;
-        }
-        if (notequal == 1 || notequal == null)
-            colors.push(colorValue);
-
-        var colorList = '';
-        colors.forEach(showColorfunc);
-
-        function showColorfunc(value) {
-            colorList +=
-                "<span style=\"background-color:" + value + "\">" + "value" + "</span>"
-        }
-        document.getElementById("colorList").innerHTML = colorList;
-    }
-
-    const form = document.getElementById("phpForm");
-    form.addEventListener("submit", setColorValue);
-    form.addEventListener("submit", setSizeValue);
-    form.addEventListener("submit", setInventoryValue);
-
-    function setColorValue() {
-        document.getElementById("colorName").value = JSON.stringify(colors);
-    }
-
-    function setSizeValue() {
-        let sizes = [];
-        let sizeNames = $('#sizes input[type="number"]');
-        for (i = 0; i < sizeNames.length; i++) {
-            sizes.push(sizeNames[i].value);
-        }
-        document.getElementById("sizeValues").value = JSON.stringify(sizes);
-    }
-
-    function setInventoryValue() {
-        let inventories = [];
-        let inventoryInputs = $('#inventories input[type="number"]');
-        for (i = 0; i < inventoryInputs.length; i++) {
-            inventories.push(inventoryInputs[i].value);
-        }
-        document.getElementById("inventory").value = JSON.stringify(inventories);
-    }
 </script>

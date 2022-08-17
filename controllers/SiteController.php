@@ -10,10 +10,17 @@ class SiteController extends Controller
 {
     public function home()   {
         $params = [
-            // 'name' => 'The Code'
+            
         ];
 
         return $this->render('home', $params);
+    }
+
+    public function products()   {
+        $params = [ 
+        ];
+
+        return $this->render('product_details', $params);
     }
 
     public function contact()   {
@@ -25,4 +32,5 @@ class SiteController extends Controller
         exit;
         return 'handle data';
     }
+
 }

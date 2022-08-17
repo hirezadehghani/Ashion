@@ -28,6 +28,9 @@ $app = new Application(dirname(__DIR__), $config);
 $app->router->get('/', [SiteController::class, 'home']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'handleContact']);
+$app->router->get('/products', [SiteController::class, 'products']);
+$app->router->post('/products', [SiteController::class, 'products']);
+// Site controller: Front
 
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
@@ -42,6 +45,8 @@ $app->router->get('/panel/productCategory', [PanelController::class, 'productCat
 $app->router->post('/panel/productCategory', [PanelController::class, 'productCategory']);
 $app->router->get('/panel/discount', [PanelController::class, 'productDiscount']);
 $app->router->post('/panel/discount', [PanelController::class, 'productDiscount']);
+$app->router->get('/panel/attribute', [PanelController::class, 'productAttribute']);
+$app->router->post('/panel/attribute', [PanelController::class, 'productAttribute']);
 
 
 $app->run();

@@ -40,12 +40,33 @@ class Category extends Model
         ];
     }
 
-    public function addCategory(){
+    public function addCategory()
+    {
         return $this->save();
     }
 
     public function save()
     {
         parent::saveToDb($this->tableName(), $this->attributes());
+    }
+
+    public function getLastFourCategory()
+    {
+        return $this->fetchWithLimit("product_category", 4, ["title"]);
+    }
+
+    protected function getCategory()
+    {
+        return $this->fetchAll("product_category");
+    }
+
+    public function getCategoryTitle(int $productId)
+    {
+        $category = $this->getCategory();
+        foreach ($category as $category_item) {
+            if ($productId  == $category_item['id']) {
+                return $category_item['title'];
+            }
+        }
     }
 }

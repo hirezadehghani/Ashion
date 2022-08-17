@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace app\models;
 
-use app\core\Application;
 use app\core\Model;
 
 class Inventory extends Model

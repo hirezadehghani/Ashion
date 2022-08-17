@@ -187,7 +187,7 @@
                 <a href="#" class="nav-link active">
                   <i class="nav-icon fa fa-dashboard"></i>
                   <p>
-                    صفحات شروع
+                    محصولات
                     <i class="right fa fa-angle-left"></i>
                   </p>
                 </a>
@@ -205,9 +205,15 @@
                     </a>
                   </li>
                   <li class="nav-item">
+                    <a href="../panel/attribute" class="nav-link active">
+                      <i class="fa fa-circle-o nav-icon"></i>
+                      <p>ویژگی ها</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="../panel/discount" class="nav-link active">
                       <i class="fa fa-circle-o nav-icon"></i>
-                      <p>تخفیف</p>
+                      <p>کوپن تخفیف</p>
                     </a>
                   </li>
                   <li class="nav-item">

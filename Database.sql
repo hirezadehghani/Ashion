@@ -17,40 +17,41 @@ create table if not exists product_inventory (
     deleted_at datetime null DEFAULT null
 );
 
-    create table if not exists discount (
-        id bigint not null primary key AUTO_INCREMENT,
-        title varchar(75) not null unique,
-        detail text null,
-        discount_percent decimal not null,
-        active boolean not null,
-        created_at datetime not null,
-        modified_at datetime null DEFAULT null,
-        deleted_at datetime null DEFAULT null
-    );
+create table if not exists discount (
+    id bigint not null primary key AUTO_INCREMENT,
+    title varchar(75) not null unique,
+    detail text null,
+    discount_percent decimal not null,
+    active boolean not null,
+    created_at datetime not null,
+    modified_at datetime null DEFAULT null,
+    deleted_at datetime null DEFAULT null
+);
 
 create table if not exists product (
     id bigint not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(75) not null unique,
     detail text null,
-    sku varchar(100) not null,
-    category_id bigint not null,
-    inventory_id bigint not null,
-    price float not null DEFAULT 0,
-    discount_id bigint not null,
-    created_at datetime not null DEFAULT NOW(),
-    modified_at datetime null DEFAULT null,
-    deleted_at datetime null DEFAULT null,
-    stock_price float null,
-    color text,
-    size text,
-    available_color text,
-    available_size text,
+    sku varchar(100) not null unique,
+    regular_price float not null,
+    sale_price float not null,
     ranking float DEFAULT 0,
     pictures varchar(100) not null,
     promotions varchar(100),
+    created_at datetime not null DEFAULT NOW(),
+    modified_at datetime null DEFAULT null,
+    deleted_at datetime null DEFAULT null,
+    category_id bigint not null,
+    stock_id int DEFAULT 1,
     foreign key (category_id) references product_category(id),
     foreign key (inventory_id) references product_inventory(id),
-    foreign key (discount_id) references discount(id)
+    foreign key (discount_id) references discount(id),
+    foreign key (stock_id) references product_stock(id)
+);
+
+create table if not exists product_stock(
+    stock_id int not null primary key AUTO_INCREMENT,
+    stock_name varchar(20) not null DEFAULT "در انبار"
 );
 
 create table if not exists user (
@@ -133,4 +134,46 @@ create table if not exists user_payment (
     tracking_no int not null,
     expiry datetime,
     foreign key (user_id) references user(id)
+);
+
+-- for product varients
+create table if not exists product_attributes(
+    attribute_id bigint not null AUTO_INCREMENT primary key,
+    attribute_name varchar(50) not null,
+    product_id bigint null,
+    foreign key (product_id) references product(id)
+);
+
+create table if not exists attribute_values(
+    value_id bigint not null AUTO_INCREMENT,
+    value_name varchar(100) not null,
+    product_id bigint null,
+    attribute_id bigint not null,
+    foreign key (product_id) references product(id),
+    foreign key (attribute_id) references product_attributes(id),
+    constraint PK_attribute_value primary key (value_id, attribute_id)
+);
+
+create table if not exists product_skus(
+    product_id bigint not null,
+    sku_id bigint not null AUTO_INCREMENT,
+    sku varchar(100) not null unique,
+    regular_price float not null,
+    sale_price float not null,
+    quantity bigint not null,
+    stock_id int DEFAULT 1,
+    foreign key (product_id) references product(id),
+    foreign key (stock_id) references product_stock(id),
+    constraint PK_product_skus primary key (product_id, sku_id)
+);
+
+create table if not exists sku_values   (
+    product_id bigint not null,
+    sku_id bigint not null,
+    attribute_id bigint not null,
+    value_id bigint not null,
+    constraint PK_product_skus primary key (product_id, sku_id, attribute_id),
+    foreign key (product_id, sku_id) REFERENCES PRODUCT_SKUS (product_id, sku_id),
+    foreign key (product_id, attribute_id) REFERENCES product_attributes (product_id, attribute_id),
+    foreign key (product_id, attribute_id, value_id) REFERENCES attribute_values (product_id, attribute_id, value_id)
 );

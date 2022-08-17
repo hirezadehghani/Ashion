@@ -47,10 +47,10 @@ abstract class Model
                 if ($ruleName === self::RULES_MAX && strlen($value) > $rule['max']) {
                     $this->addError($attribute, self::RULES_MAX, $rule);
                 }
-                if($ruleName === self::RULES_MINVALUE && $value < $rule['min']) {
+                if ($ruleName === self::RULES_MINVALUE && $value < $rule['min']) {
                     $this->addError($attribute, self::RULES_MINVALUE, $rule);
                 }
-                if($ruleName === self::RULES_MAXVALUE && $value > $rule['max']) {
+                if ($ruleName === self::RULES_MAXVALUE && $value > $rule['max']) {
                     $this->addError($attribute, self::RULES_MAXVALUE, $rule);
                 }
                 if ($ruleName === self::RULES_MATCH && $value !== $this->{$rule['match']}) {
@@ -126,29 +126,40 @@ abstract class Model
         return Application::$app->db->pdo->prepare($sql);
     }
 
-    public function fetchItem($tableName, $param)  {
+    public function fetchItem($tableName, $param)
+    {
         $statement = self::prepare(
             "SELECT $param from $tableName"
         );
         $statement->execute();
         return $statement->fetchAll();
     }
-    
 
-    public function fetchGroup($tableName, $params)  {
+
+    public function fetchGroup($tableName, $params)
+    {
         $statement = self::prepare(
-            "SELECT " . implode(',', $params). " from $tableName"
+            "SELECT " . implode(',', $params) . " from $tableName"
         );
-       
+
         $statement->execute();
         return $statement->fetchAll();
     }
 
-    public function fetchAll($tableName)    {
+    public function fetchAll($tableName)
+    {
         $stmt = self::prepare(
             "SELECT * from $tableName"
         );
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+    public function fetchWithLimit($tableName, $limit, $params)
+    {
+        $statement = self::prepare(
+            "SELECT " . implode(',', $params) . " from $tableName LIMIT $limit"
+        );
+        $statement->execute();
+        return $statement->fetchAll();
     }
 }

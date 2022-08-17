@@ -8,6 +8,8 @@ use app\models\product;
 use app\core\Request;
 use app\models\Category;
 use app\models\Discount;
+use app\models\product_attributes;
+use Attribute;
 
 class PanelController extends Controller
 {
@@ -90,5 +92,27 @@ class PanelController extends Controller
         return $this->render('admin/discount',$params);
     }
 
+    public function productAttribute(Request $request)  {
+        $attribute = new product_attributes();
+
+        $params = [
+            'pageTitle' => 'افزودن مشخصه',
+            'title' => 'فروشگاه اینترنتی اشیون',
+            'dependencyAddr' => '../',
+            'model' => $attribute
+        ];
+
+        if ($request->isPost()) {
+            $attribute->loadData($request->getBody());
+            if($attribute->validate() && $attribute->save())    {
+                Application::$app->response->redirect('/panel/attribute');
+            }
+            $this->setLayout('admin');
+            return $this->render('/admin/attribute',$params);
+        }
+        $this->setLayout('admin');
+        return $this->render('admin/attribute',$params);
+    }
+    
 
 }

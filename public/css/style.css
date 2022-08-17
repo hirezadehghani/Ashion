@@ -1148,7 +1148,7 @@ ol {
 }
 
 .filter__controls li:last-child {
-	margin-right: 0;
+	margin-left: 0;
 }
 
 .product__item {
@@ -1300,7 +1300,7 @@ ol {
 }
 
 .product__item__text .rating i:last-child {
-	margin-right: 0;
+	margin-left: 0;
 }
 
 .product__item__text .product__price {

@@ -15,7 +15,10 @@ class Form
         echo sprintf('<form action="%s" method="%s">', $action, $method);
         return new Form();
     }
-
+    public static function beginWithId($action, $method, $id)  {
+        echo sprintf('<form action="%s" method="%s" id="%s">', $action, $method, $id);
+        return new Form();
+    }
     public static function end()    {
         echo '</form>';
     }
