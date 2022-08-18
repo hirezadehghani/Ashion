@@ -51,7 +51,7 @@ create table if not exists product (
 
 create table if not exists product_stock(
     stock_id int not null primary key AUTO_INCREMENT,
-    stock_name varchar(20) not null DEFAULT "در انبار"
+    stock_name varchar(20) not null
 );
 
 create table if not exists user (

@@ -2,19 +2,18 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">فرم زیر را تکمیل کنید و ورود بزنید</p>
 
-      <form action="../../index2.html" method="post">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="ایمیل">
-          <div class="input-group-append">
+      <?php $form = \app\core\form\Form::begin('', 'post') ?>
+        <!-- <div class="input-group mb-3"> -->
+        <!-- <div class="input-group-append">
             <span class="fa fa-envelope input-group-text"></span>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="رمز عبور">
-          <div class="input-group-append">
+          </div>   -->
+        <?= $form->field($model, 'email', 'email', 'ایمیل');?>
+          
+        <!-- </div> -->
+        <?= $form->field($model, 'password', 'password', 'رمز عبور');?>
+          <!-- <div class="input-group-append">
             <span class="fa fa-lock input-group-text"></span>
-          </div>
-        </div>
+          </div> -->
         <div class="row">
           <div class="col-8">
             <div class="checkbox icheck">
@@ -46,7 +45,7 @@
         <a href="#">رمز عبورم را فراموش کرده ام.</a>
       </p>
       <p class="mb-0">
-        <a href="register.html" class="text-center">ثبت نام</a>
+        <a href="/register" class="text-center">ثبت نام</a>
       </p>
     </div>
     <!-- /.login-card-body -->

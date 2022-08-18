@@ -94,9 +94,7 @@ class Product extends Model
     public function getLastProduct($number, $order)   {
         $stmt = parent::prepare("
         SELECT * from product
-        ORDER BY $order LIMIT $number
-        ");
-
+        order by id $order, id $order limit $number");
         $stmt->execute();
         return $stmt->fetchAll();
     }
@@ -132,4 +130,60 @@ class Product extends Model
 
         return $product;
     }
+
+    // public function getLastRowProduct   {
+    //     return $this->fetchRow()
+    // }
+
+    public function findRelatedProducts() :array {
+        $category = new Category;
+        //Finding Related Products
+            //if in category of this product not found search in other categories
+
+            $products = $this->fetchGroup("product", ['id', 'category_id']);
+            $productIds = [];
+            $relatedProducts = [];
+            foreach ($products as $productItem) {
+                if ($productItem['id'] != $this->id)
+                    array_push($productIds, ['id' => $productItem['id'], 'category_id' => $productItem['category_id']]);
+            }
+            // unset($productIds[array_search($product->id,$productIds['id'])]);
+            //Unset this product from related 
+            $categoryId = $this->category_id;
+            $find = 1;
+            $count = 1;
+            while ($find != 0) {
+                if ($count > 4)
+                    $find = 0;
+                else {
+                    foreach ($productIds as $productItem) {
+                        if ($categoryId == $productItem['category_id']) {
+                            unset($productIds[array_search(['id' => $productItem['id'], 'category_id' => $productItem['category_id']], $productIds)]);
+                            $count++;
+                            array_push($relatedProducts, $productItem['id']);
+                        }
+                    }
+                }
+                if ($count < 4) {
+                    $lastCategory = $category->getLastCategory(1, 'DESC')[0];
+                    $categoryId = rand(1, $lastCategory['id']);
+                    foreach ($productIds as $productItem) {
+                        unset($productIds[array_search(['id' => $productItem['id'], 'category_id' => $productItem['category_id']], $productIds)]);
+                        array_push($relatedProducts, $productItem['id']);
+                        $count++;
+                    }
+                }
+            }
+            return $relatedProducts;
+    }
+    public function getPictureAddr($index, $pictures) : string {
+        return UPLOAD_DIR . json_decode($pictures, true)[$index];
+        
+    }
+
+    public function getPriceSign() : string {
+        return 'ریال';
+    }
+
+    // public func
 }

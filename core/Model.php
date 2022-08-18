@@ -12,6 +12,7 @@ abstract class Model
     public const RULES_UNIQUE = 'unique';
     public const RULES_MINVALUE = 'minValue';
     public const RULES_MAXVALUE = 'maxvalue';
+    public const RULES_UNCORRECT = 'uncorrect';
 
     public function loadData($data)
     {
@@ -92,7 +93,8 @@ abstract class Model
             self::RULES_MATCH => 'این فیلد باید با فیلد {match} یکسان باشد',
             self::RULES_UNIQUE => 'اطلاعات وارد شده تکراری می باشد',
             self::RULES_MINVALUE => 'عدد وارد شده باید بیشتر یا مساوی {min} باشد',
-            self::RULES_MAXVALUE => 'عدد وارد شده باید کمتر یا مساوی {max} باشد'
+            self::RULES_MAXVALUE => 'عدد وارد شده باید کمتر یا مساوی {max} باشد',
+            self::RULES_UNCORRECT => 'ایمیل یا رمز عبور وارد شده اشتباه است'
         ];
     }
 
@@ -161,5 +163,13 @@ abstract class Model
         );
         $statement->execute();
         return $statement->fetchAll();
+    }
+
+    public function fetchRow($tableName, $RowId, $params = [], $colIdName = 'id')   {
+        $statement = self::prepare(
+            "SELECT " . implode(',', $params) . " from $tableName WHERE $colIdName = $RowId"
+        );
+        $statement->execute();
+        return $statement->fetch();
     }
 }

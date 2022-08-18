@@ -54,6 +54,15 @@ class User extends Model
 
     public function rules() : array
     {
+        //for User login
+        if($_SERVER['REQUEST_URI'] == '/login'){
+            return [
+                'email' => [self::RULES_EMAIL, self::RULES_REQUIRED],
+                'password' => [self::RULES_REQUIRED]
+            ];
+        }
+        //for User Register
+        else{
         return [
             'firstName' => [self::RULES_REQUIRED],
             'lastName' => [self::RULES_REQUIRED],
@@ -67,6 +76,7 @@ class User extends Model
             'passwordConfirm' => [[self::RULES_MATCH, 'match' => 'رمز عبور']],
         ];
     }
+    }
 
     public function save()
     {
@@ -76,5 +86,21 @@ class User extends Model
     public function getDisplayName(): string
     {
         return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function auth () :bool {
+        $user = new User();
+        $user_select = parent::prepare("SELECT * FROM user WHERE email = :email AND password = :password");
+        $user_select->execute(['email' => $this->email, 'password' => $this->password]);
+        if($user_select->rowCount() == 1){
+            session_start();
+            $_SESSION['id'] = $this->id;
+            echo 'success';
+            return 1;
+        }
+        else {
+            $this->addError('email', self::RULES_UNCORRECT);
+        }
+        return 0;
     }
 }

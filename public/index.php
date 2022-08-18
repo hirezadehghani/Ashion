@@ -25,19 +25,22 @@ $config =   [
 
 $app = new Application(dirname(__DIR__), $config);
 
+// Site controller: Front-end
 $app->router->get('/', [SiteController::class, 'home']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'handleContact']);
 $app->router->get('/products', [SiteController::class, 'products']);
 $app->router->post('/products', [SiteController::class, 'products']);
-// Site controller: Front
+$app->router->get('/shopcart', [SiteController::class, 'shopCart']);
+$app->router->post('/shopcart', [SiteController::class, 'shopCart']);
 
+// User Authenticate : Back-end
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
 
-//Product managment
+//Product managment : Back-end
 $app->router->get('/panel', [PanelController::class, 'dashboard']);
 $app->router->get('/panel/addProduct', [PanelController::class, 'addProduct']);
 $app->router->post('/panel/addProduct', [PanelController::class, 'addProduct']);

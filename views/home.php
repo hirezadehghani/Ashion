@@ -85,27 +85,21 @@ use app\models\Product;
         </div>
         <div class="row property__gallery">
             <?php
-            $products = new Product();
+            $productClass = new Product();
             $category = new Category;
-            $category = $category->fetchGroup("product_category", ['id', "title"]);
-            $products = $products->getLastProduct(8, '"desc"');
+            $products = $productClass->getLastProduct(8, 'DESC');
             $lastFourProduct = 0;
             foreach ($products as $product) {
-                foreach ($category as $category_item) {
-                    if ($product['category_id'] == $category_item['id']) {
-                        $categoryTitle = $category_item['title'];
-                        $categoryId = $category_item['id'];
-                    }
-                }
+                $singleProduct = $productClass->getObject($product['id']);
+                $categoryTitle = $category->getCategoryTitle($product['id']);
                 $lastFourProduct++;
-                $picture = UPLOAD_DIR . json_decode($product['pictures'], true)[0];
+                $picture = $singleProduct->getPictureAddr(0, $product['pictures']);
                 $finalPrice = $product['regular_price'] - $product['sale_price'];
                 if ($finalPrice > 0) {
                     $saleTag = 'حراج';
                 }
                 $salePrice = $product['sale_price'];
                 $regularPrice = $product['regular_price'];
-                $priceSign = " ریال";
                 $stars = $product['ranking'];
                 foreach ($stockStats as $stockStat) {
                     if ($product['stock_id'] == $stockStat['id'])
@@ -121,7 +115,6 @@ use app\models\Product;
                     $tag = $stockTag;
                     $class = 'stockout';
                 }
-
             ?>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix <?= trim($categoryTitle) ?>">
                     <div class="product__item">
@@ -134,7 +127,7 @@ use app\models\Product;
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#"><?= $product['title'] ?></a></h6>
+                            <h6><a href="<?= 'products?id='. $product['id']?>"><?= $product['title'] ?></a></h6>
                             <div class="rating">
                                 <?php for ($i = 0; $i < $stars; $i++) { ?>
                                     <i class="fa fa-star"></i>

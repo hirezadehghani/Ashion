@@ -69,4 +69,12 @@ class Category extends Model
             }
         }
     }
+
+    public function getLastCategory($number, $order)   {
+        $stmt = parent::prepare("
+        SELECT * from product_category
+        order by id $order, id $order limit $number");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

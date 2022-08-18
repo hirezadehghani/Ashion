@@ -131,21 +131,71 @@ use app\models\product_attributes;
 </section>
 
 <script src="<?= $params['dependencyAddr'] ?>plugins/ckeditor/ckeditor.js"></script>
-<script>
-    $(document).ready(function() {
 
-        // Replace the <textarea id="editor"> with a CKEditor
-        // instance, using default configuration.
-        ClassicEditor
-            .create(document.querySelector('#editor'))
-            .then(function(editor) {
-                // The editor instance
-            })
-            .catch(function(error) {
-                console.error(error)
-            })
+<script>ClassicEditor
+			.create( document.querySelector( '#editor' ), {
+				
+				toolbar: {
+					items: [
+						'heading',
+						'fontFamily',
+						'fontSize',
+						'fontColor',
+						'fontBackgroundColor',
+						'highlight',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'bulletedList',
+						'numberedList',
+						'|',
+						'outdent',
+						'indent',
+						'alignment',
+						'|',
+						'imageUpload',
+						'blockQuote',
+						'insertTable',
+						'mediaEmbed',
+						'htmlEmbed',
+						'code',
+						'CKFinder',
+						'undo',
+						'redo'
+					]
+				},
+				language: 'fa',
+				image: {
+					toolbar: [
+						'imageTextAlternative',
+						'imageStyle:full',
+						'imageStyle:side'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				},
+				licenseKey: '',
+				
+				
+			} )
+			.then( editor => {
+				window.editor = editor;
+				
+			} )
+			.catch( error => {
+				console.error( 'Oops, something went wrong!' );
+				console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+				console.warn( 'Build id: lk1jrmfyew48-v2doq7vgpypp' );
+				console.error( error );
+			} );
 
         //select 2 function
         // $('.select2').select2();
-    });
+
 </script>

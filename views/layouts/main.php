@@ -49,8 +49,8 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="#">ورود</a>
-            <a href="#">ثبت نام</a>
+            <a href="/login">ورود</a>
+            <a href="/register">ثبت نام</a>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -87,8 +87,8 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="#">ورود</a>
-                            <a href="#">ثبت نام</a>
+                            <a href="/login">ورود</a>
+                            <a href="/register">ثبت نام</a>
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>

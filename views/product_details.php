@@ -2,18 +2,21 @@
 
 use app\models\Category;
 use app\models\Product;
+use app\models\Product_stock;
 
 $product = new Product;
 $category = new Category;
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && !empty($_GET['id'])) {
     $productId = $_GET['id'];
     $productId = htmlentities($productId);
 }
 $product = $product->getObject($productId);
-// var_dump($product->category_id);
 $categoryTitle = $category->getCategoryTitle($product->category_id);
-$pictures =json_decode($product->pictures, true);
+$pictures = json_decode($product->pictures, true);
+$priceSign = $product->getPriceSign();
+$stockTitle = new Product_stock;
+$stockTitle = $stockTitle->getStockName($product->stock_id);
 ?>
 <!-- Breadcrumb Begin -->
 <div class="breadcrumb-option">
@@ -38,43 +41,45 @@ $pictures =json_decode($product->pictures, true);
             <div class="col-lg-6">
                 <div class="product__details__pic">
                     <div class="product__details__pic__left product__thumb nice-scroll">
-                        <?php foreach ($pictures as $picture) { ?>
-                            <a class="pt active" href="<?= '#' . $picture?>">
-                                <img src="<?= UPLOAD_DIR . $picture?>" alt="<?= '#' . $picture?>">
+                        <!-- <a class="pt active" href="#2022081614562732product-3.jpg">
+                            <img src="/upload/2022081614562736thumb-2.jpg" alt="">
+                        </a> -->
+                        <?php foreach ($pictures as $picture) {
+                        ?>
+                            <a class="pt" href="<?= '#' . $picture ?>">
+                                <img src="<?= UPLOAD_DIR . $picture ?>" alt="">
                             </a>
                         <?php } ?>
                     </div>
                     <div class="product__details__slider__content">
                         <div class="product__details__pic__slider owl-carousel">
-                        <?php foreach ($pictures as $picture) { ?>
-                            <img data-hash="<?=$picture?>" class="product__big__img" src="<?= UPLOAD_DIR.$picture?>" alt="<?=$picture?>">
-                        <?php } ?>  
+                            <?php foreach ($pictures as $picture) {
+                            ?>
+                                <img data-hash="<?= $picture ?>" class="product__big__img" src="<?= UPLOAD_DIR . $picture ?>" alt="">
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="product__details__text">
-                    <h3>Essential structured blazer <span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
+                    <h3><?= $product->title ?><span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
                     <div class="rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                        <?php for ($i = 0; $i < $product->ranking; $i++) { ?>
+                            <i class="fa fa-star"></i>
+                        <?php } ?>
                         <span>( 138 reviews )</span>
                     </div>
-                    <div class="product__details__price">$ 75.0 <span>$ 83.0</span></div>
-                    <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
-                        magni lores eos qui ratione voluptatem sequi nesciunt.</p>
+                    <div class="product__details__price"><?= $product->sale_price . $priceSign ?><span><?= $product->regular_price . $priceSign ?></span></div>
+                    <p><?= substr($product->detail, 0, 210) ?></p>
                     <div class="product__details__button">
                         <div class="quantity">
-                            <span>Quantity:</span>
+                            <span>تعداد:</span>
                             <div class="pro-qty">
                                 <input type="text" value="1">
                             </div>
                         </div>
-                        <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                        <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> خرید</a>
                         <ul>
                             <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                             <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
@@ -83,10 +88,11 @@ $pictures =json_decode($product->pictures, true);
                     <div class="product__details__widget">
                         <ul>
                             <li>
-                                <span>Availability:</span>
+                                <span>وضعیت موجودی:</span>
                                 <div class="stock__checkbox">
                                     <label for="stockin">
-                                        In Stock
+
+                                        <?= $stockTitle['stock_name'] ?>
                                         <input type="checkbox" id="stockin">
                                         <span class="checkmark"></span>
                                     </label>
@@ -132,7 +138,7 @@ $pictures =json_decode($product->pictures, true);
                             </li>
                             <li>
                                 <span>Promotions:</span>
-                                <p>Free shipping</p>
+                                <p><?= $product->promotions ?></p>
                             </li>
                         </ul>
                     </div>
@@ -153,17 +159,8 @@ $pictures =json_decode($product->pictures, true);
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                            <h6>Description</h6>
-                            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
-                                Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
-                                voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
-                                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
-                                consequat massa quis enim.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-                                nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
-                                quis, sem.</p>
+                            <h6>توضیحات</h6>
+                          <p>  <?php echo strval($product->detail) ?> </p>
                         </div>
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <h6>Specification</h6>
@@ -198,99 +195,37 @@ $pictures =json_decode($product->pictures, true);
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="related__title">
-                    <h5>RELATED PRODUCTS</h5>
+                    <h5>محصولات مرتبط</h5>
                 </div>
             </div>
+            <?php
+            $relatedProducts = $product->findRelatedProducts();
+            foreach($relatedProducts as $relatedProduct)    {
+                $singleProduct = $product->fetchRow("product", $relatedProduct, ['title', 'regular_price', 'sale_price', 'ranking', 'stock_id', 'pictures']);
+                $picture = $product->getPictureAddr(0, $singleProduct['pictures']);
+?>
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-1.jpg">
+                    <div class="product__item__pic set-bg" data-setbg="<?=$picture?>">
                         <div class="label new">New</div>
                         <ul class="product__hover">
-                            <li><a href="img/product/related/rp-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="<?=$picture?>" class="image-popup"><span class="arrow_expand"></span></a></li>
                             <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                             <li><a href="#"><span class="icon_bag_alt"></span></a></li>
                         </ul>
                     </div>
                     <div class="product__item__text">
-                        <h6><a href="#">Buttons tweed blazer</a></h6>
+                        <h6><a href="#"><?=$singleProduct['title']?></a></h6>
                         <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                        <?php for ($i = 0; $i < $singleProduct['ranking']; $i++) { ?>
+                                    <i class="fa fa-star"></i>
+                                <?php } ?>
                         </div>
-                        <div class="product__price">$ 59.0</div>
+                        <div class="product__price"><?=$singleProduct['sale_price'] . $priceSign?><span><?php if($singleProduct['regular_price'] > 0) echo $singleProduct['regular_price']. $priceSign?></span></div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-2.jpg">
-                        <ul class="product__hover">
-                            <li><a href="img/product/related/rp-2.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6><a href="#">Flowy striped skirt</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product__price">$ 49.0</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-3.jpg">
-                        <div class="label stockout">out of stock</div>
-                        <ul class="product__hover">
-                            <li><a href="img/product/related/rp-3.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6><a href="#">Cotton T-Shirt</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product__price">$ 59.0</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/related/rp-4.jpg">
-                        <ul class="product__hover">
-                            <li><a href="img/product/related/rp-4.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6><a href="#">Slim striped pocket shirt</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product__price">$ 59.0</div>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </section>

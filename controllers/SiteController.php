@@ -22,6 +22,13 @@ class SiteController extends Controller
 
         return $this->render('product_details', $params);
     }
+    public function shopCart()   {
+        $params = [ 
+        ];
+
+        return $this->render('shop_cart', $params);
+    }
+
 
     public function contact()   {
         return $this->render('contact');

@@ -5,16 +5,16 @@
       <?php $form = \app\core\form\Form::begin('', "post"); ?>
 <div class="row">
   <div class="col">
-    <?= $form->field($model, 'firstName', 'نام') ?>
+    <?= $form->field($model,'text', 'firstName', 'نام') ?>
   </div>
   <div class="col">
-    <?= $form->field($model, 'lastName', 'نام خانوادگی') ?>
+    <?= $form->field($model,'text', 'lastName', 'نام خانوادگی') ?>
   </div>
 </div>
-<?= $form->field($model, 'email', 'ایمیل') ?>
-<?= $form->field($model, 'telephone', 'شماره تلفن') ?>
-<?= $form->field($model, 'password', 'رمز عبور')->passwordField() ?>
-<?= $form->field($model, 'passwordConfirm', 'تکرار رمز عبور')->passwordField() ?>
+<?= $form->field($model,'email', 'email', 'ایمیل') ?>
+<?= $form->field($model,'number', 'telephone', 'شماره تلفن') ?>
+<?= $form->field($model,'password', 'password', 'رمز عبور')->passwordField() ?>
+<?= $form->field($model,'password', 'passwordConfirm', 'تکرار رمز عبور')->passwordField() ?>
 
 <div class="row">
           <div class="col-8">
