@@ -123,7 +123,7 @@ use app\models\Product;
                             <ul class="product__hover">
                                 <li><a href="<?= $picture ?>" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="<?= 'products?id='. $product['id']?>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">

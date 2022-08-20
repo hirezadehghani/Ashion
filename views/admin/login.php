@@ -1,8 +1,14 @@
 <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">فرم زیر را تکمیل کنید و ورود بزنید</p>
+      <?php
 
-      <?php $form = \app\core\form\Form::begin('', 'post') ?>
+use app\core\Application;
+
+      if (isset($_SESSION['id'])){
+        Application::$app->response->redirect('/panel');
+      }
+      $form = \app\core\form\Form::begin('', 'post') ?>
         <!-- <div class="input-group mb-3"> -->
         <!-- <div class="input-group-append">
             <span class="fa fa-envelope input-group-text"></span>

@@ -92,10 +92,10 @@ class User extends Model
         $user = new User();
         $user_select = parent::prepare("SELECT * FROM user WHERE email = :email AND password = :password");
         $user_select->execute(['email' => $this->email, 'password' => $this->password]);
+        $user = $user_select->fetch();
         if($user_select->rowCount() == 1){
             session_start();
-            $_SESSION['id'] = $this->id;
-            echo 'success';
+            $_SESSION['id'] = $user['id'];
             return 1;
         }
         else {

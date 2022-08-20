@@ -67,11 +67,14 @@ create table if not exists user (
 
 create table if not exists shopping_session (
     id bigint not null AUTO_INCREMENT primary key,
-    user_id bigint not null,
-    total float not null,
+    user_id bigint DEFAULT null,
+    guest_session_id varchar(100) DEFAULT null,
+    total decimal(10) not null DEFAULT '0.00',
+    UNIQUE KEY `session_index` (`id`,`user_id`) USING BTREE,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
-    foreign key (user_id) references users(id)
+    CONSTRAINT `fk_shopping_user`
+        foreign key (user_id) references users(id)
 );
 
 create table if not exists cart_item (
@@ -80,7 +83,11 @@ create table if not exists cart_item (
     product_id bigint not null,
     quantity int not null,
     created_at datetime not null,
-    modified_at datetime null DEFAULT null
+    modified_at datetime null DEFAULT null,
+    constraint  `fk_session_id`
+        foreign key (session_id) references shopping_session(id),
+    constraint `fk_product_id`
+        foreign key (product_id) references product(id)
 );
 
 create table if not exists order_details (

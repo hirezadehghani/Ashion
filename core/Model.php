@@ -165,11 +165,38 @@ abstract class Model
         return $statement->fetchAll();
     }
 
-    public function fetchRow($tableName, $RowId, $params = [], $colIdName = 'id')   {
+    public function fetchRow($tableName, $RowId, $params = [], $colIdName = 'id')
+    {
         $statement = self::prepare(
             "SELECT " . implode(',', $params) . " from $tableName WHERE $colIdName = $RowId"
         );
         $statement->execute();
         return $statement->fetch();
+    }
+
+    public function fetchWhere($tableName, $colName, $where)
+    {
+        $statement = self::prepare(
+            "SELECT * from $tableName WHERE $colName = $where"
+        );
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    public function fetchLastRow($tableName, $number, $order)   {
+        $stmt = self::prepare("
+        SELECT * from $tableName
+        order by id $order, id $order limit $number");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function update($what, $tableName, $value, $colName, $where)
+    {
+        $statement = self::prepare(
+            "UPDATE $what from $tableName SET $what=$value WHERE $colName = $where"
+        );
+        $statement->execute();
+        return $statement->fetchAll();
     }
 }

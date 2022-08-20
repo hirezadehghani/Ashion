@@ -55,4 +55,15 @@ class AuthController extends Controller
         $this->setLayout('auth');
         return $this->render('/admin/register', $params);
     }
+
+    public function logout()
+    {
+        $params = [
+        ];
+
+        //If request GET
+        $this->setLayout('auth');
+        return $this->render('/admin/logout', $params);
+        }
+
 }

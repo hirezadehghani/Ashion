@@ -147,7 +147,6 @@ class Product extends Model
                 if ($productItem['id'] != $this->id)
                     array_push($productIds, ['id' => $productItem['id'], 'category_id' => $productItem['category_id']]);
             }
-            // unset($productIds[array_search($product->id,$productIds['id'])]);
             //Unset this product from related 
             $categoryId = $this->category_id;
             $find = 1;
@@ -158,6 +157,7 @@ class Product extends Model
                 else {
                     foreach ($productIds as $productItem) {
                         if ($categoryId == $productItem['category_id']) {
+                            if($count > 4)  break;
                             unset($productIds[array_search(['id' => $productItem['id'], 'category_id' => $productItem['category_id']], $productIds)]);
                             $count++;
                             array_push($relatedProducts, $productItem['id']);
@@ -168,6 +168,7 @@ class Product extends Model
                     $lastCategory = $category->getLastCategory(1, 'DESC')[0];
                     $categoryId = rand(1, $lastCategory['id']);
                     foreach ($productIds as $productItem) {
+                        if($count > 4)  break;
                         unset($productIds[array_search(['id' => $productItem['id'], 'category_id' => $productItem['category_id']], $productIds)]);
                         array_push($relatedProducts, $productItem['id']);
                         $count++;
@@ -185,5 +186,8 @@ class Product extends Model
         return 'ریال';
     }
 
-    // public func
+    public function addToCart () {
+        return 1;
+        
+    }
 }

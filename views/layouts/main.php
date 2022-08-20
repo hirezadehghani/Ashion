@@ -1,4 +1,11 @@
-<?php const UPLOAD_DIR = 'upload/';?>
+<?php
+
+use app\models\User;
+if(isset($_SESSION['id'])) {
+    $UserLoggedIn = 1; 
+    $id=$_SESSION['id'];
+}
+ const UPLOAD_DIR = 'upload/';?>
 <!DOCTYPE html>
 <html lang="fa-IR">
 
@@ -49,8 +56,23 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="/login">ورود</a>
-            <a href="/register">ثبت نام</a>
+        <?php
+                            session_start();
+                            if($UserLoggedIn)  {
+                                $user = new User();
+                                $user = $user->fetchRow("user", $id, ['firstName', 'lastName']);
+                            ?>
+                            <a href="/panel">
+                                <?= $user['firstName'] . 'خوش آمدی!' ?>
+                            </a>
+                            <a href="/logout">خروج</a>
+                            <?php
+                            }
+                            else {
+                            ?>
+                            <a href="/login">ورود</a>
+                            <a href="/register">ثبت نام</a>
+                            <?php }?>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -87,8 +109,23 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
+                            <?php
+                            session_start();
+                            if($UserLoggedIn)  {
+                                $user = new User();
+                                $user = $user->fetchRow("user", $id, ['firstName', 'lastName']);
+                            ?>
+                            <a href="/panel">
+                                <?= $user['firstName']. 'خوش‌آمدی' ?>
+                            </a>
+                            <a href="/logout">خروج</a>
+                            <?php
+                            }
+                            else {
+                            ?>
                             <a href="/login">ورود</a>
                             <a href="/register">ثبت نام</a>
+                            <?php }?>
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>

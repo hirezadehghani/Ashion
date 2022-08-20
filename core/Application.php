@@ -19,6 +19,7 @@ class Application
     public Database $db;
     public static Application $app;
     public Controller $controller;
+    public Session $session;
 
     public function __construct(string $rootPath, array $config)
     {
@@ -27,20 +28,23 @@ class Application
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
-    
+        $this->session = new Session();
+
         $this->db = new Database($config['db']);
-    }   
+    }
 
     public function run()
     {
         echo $this->router->resolve();
     }
 
-    public function getController() {
+    public function getController()
+    {
         return $this->controller;
     }
 
-    public function setController($controller) {
+    public function setController($controller)
+    {
         $this->controller = $controller;
     }
 }
