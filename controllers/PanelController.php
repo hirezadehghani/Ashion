@@ -9,6 +9,7 @@ use app\core\Request;
 use app\models\Category;
 use app\models\Discount;
 use app\models\product_attributes;
+use app\models\product_combinations;
 use app\models\Product_stock;
 use app\models\ProductSkus;
 use app\models\sku_values;
@@ -51,7 +52,7 @@ class PanelController extends Controller
             $product_skus->add();
 
             //fetch last field sku_id of product_skus table for save in sku_values table
-            $sku_id = $product_skus->fetchLastRow($product_skus->tableName(), 1, 'desc');
+            $sku_id = $product_skus->fetchLastProductRow($product_skus->tableName(), 1, 'desc',$_GET['product_id']);
 
             $sku_values = new sku_values;
             $sku_values->add($sku_id[0]['sku_id']);

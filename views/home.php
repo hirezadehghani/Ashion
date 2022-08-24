@@ -2,6 +2,9 @@
 
 use app\models\Category;
 use app\models\Product;
+use app\models\ProductSkus;
+use app\models\sku_values;
+
 ?>
 
 <!-- Categories Section Begin -->
@@ -87,33 +90,39 @@ use app\models\Product;
             <?php
             $productClass = new Product();
             $category = new Category;
+            $sku_values = new sku_values;
+            $product_skus = new ProductSkus;
+            // get last 8 product
             $products = $productClass->getLastProduct(8, 'DESC');
-            $lastFourProduct = 0;
+            $lastFourProduct = 0; //for new tag
+            $unavailable = 0; //for unavailable products
             foreach ($products as $product) {
                 $singleProduct = $productClass->getObject($product['id']);
                 $categoryTitle = $category->getCategoryTitle($product['id']);
                 $lastFourProduct++;
                 $picture = $singleProduct->getPictureAddr(0, $product['pictures']);
-                $finalPrice = $product['regular_price'] - $product['sale_price'];
-                if ($finalPrice > 0) {
-                    $saleTag = 'حراج';
-                }
-                $salePrice = $product['sale_price'];
-                $regularPrice = $product['regular_price'];
+                // $sku_values = $sku_values->fetchWhere($sku_values->tableName(), 'product_id', $singleProduct->id); //array of sku_id of product
+                // var_dump($sku_values);
+                // exit;
+                $product_skus = $product_skus->getObject($singleProduct->id);
+                $regularPrice = $product_skus->regular_price;
+                //fetch cheapest product for sale_price and stock_id
+                $cheapest_product = $product_skus->getPriceStock_id($singleProduct->id);
+                if (!$cheapest_product)   $unavailable = 1;
+                $salePrice = $cheapest_product[0]['sale_price'];
+                $finalPrice = $regularPrice - $salePrice;
                 $stars = $product['ranking'];
-                foreach ($stockStats as $stockStat) {
-                    if ($product['stock_id'] == $stockStat['id'])
-                        $stockTag = $stockStat['title'];
-                }
-                if ($saleTag) {
+                if ($finalPrice > 0) {
                     $tag = 'حراج';
                     $class = "sale";
                 } else if ($lastFourProduct < 5) {
                     $tag = 'جدید';
                     $class = 'new';
-                } else {
-                    $tag = $stockTag;
+                }
+                if ($unavailable) {
+                    $tag = 'ناموجود';
                     $class = 'stockout';
+                    $regularPrice = 'ناموجود';
                 }
             ?>
                 <div class="col-lg-3 col-md-4 col-sm-6 mix <?= trim($categoryTitle) ?>">
@@ -123,17 +132,19 @@ use app\models\Product;
                             <ul class="product__hover">
                                 <li><a href="<?= $picture ?>" class="image-popup"><span class="arrow_expand"></span></a></li>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="<?= 'products?id='. $product['id']?>"><span class="icon_bag_alt"></span></a></li>
+                                <li><a href="<?= 'products?id=' . $product['id'] ?>"><span class="icon_bag_alt"></span></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="<?= 'products?id='. $product['id']?>"><?= $product['title'] ?></a></h6>
+                            <h6><a href="<?= 'products?id=' . $product['id'] ?>"><?= $product['title'] ?></a></h6>
                             <div class="rating">
                                 <?php for ($i = 0; $i < $stars; $i++) { ?>
                                     <i class="fa fa-star"></i>
                                 <?php } ?>
                             </div>
-                            <div class="product__price"><?= $salePrice, $priceSign ?><?php if ($regularPrice > 0) ?><span><?= $regularPrice, $priceSign ?></span></div>
+                            <div class="product__price">
+                                    <?= $salePrice, $priceSign ?><?php if ($regularPrice > 0) ?><span><?= $regularPrice, $priceSign ?></span>
+                            </div>
                         </div>
                     </div>
                 </div>

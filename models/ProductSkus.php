@@ -66,11 +66,59 @@ class ProductSkus extends Model
         parent::saveToDb($this->tableName(), $this->attributes());
     }
 
-    public function fetchLastRow($tableName, $number, $order)   {
+    public function fetchLastProductRow($tableName, $number, $order, $product_id)   {
         $stmt = self::prepare("
         SELECT * from $tableName
+        WHERE product_id = $product_id
         order by sku_id $order, sku_id $order limit $number");
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+
+    public function getObject (int $product_id) : ProductSkus {
+        $stmt = parent::prepare("
+        SELECT * from product_skus WHERE product_id=:product_id");
+        $stmt->bindParam(":product_id", $product_id);
+        $stmt->execute();
+        $product_skus = new ProductSkus;
+        $data = $stmt->fetch();
+        if($data != null)   {
+        $product_skus->product_id = $product_id;
+        $product_skus->regular_price = $data['regular_price'];
+        $product_skus->sale_price = $data['sale_price'];
+        $product_skus->quantity = $data['quantity'];
+        $product_skus->stock_id = $data['stock_id'];
+        $product_skus->sku = $data['sku'];
+        }
+        return $product_skus;
+    }
+
+    public function getPriceStock_id (int $product_id) : array  {
+        $stmt = self::prepare("
+        SELECT sale_price,stock_id from product_skus
+        WHERE product_id = $product_id
+        AND quantity > 0
+        order by sale_price ASC, sale_price ASC limit 1");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getAllObjects (int $product_id, $sku_id) : ProductSkus {
+        $stmt = parent::prepare("
+        SELECT * from product_skus WHERE product_id=:product_id AND sku_id =:sku_id");
+        $stmt->bindParam(":product_id", $product_id);
+        $stmt->bindParam(":sku_id", $sku_id);
+        $stmt->execute();
+        $product_skus = new ProductSkus;
+        $data = $stmt->fetch();
+        if($data != null)   {
+        $product_skus->product_id = $product_id;
+        $product_skus->regular_price = $data['regular_price'];
+        $product_skus->sale_price = $data['sale_price'];
+        $product_skus->quantity = $data['quantity'];
+        $product_skus->stock_id = $data['stock_id'];
+        $product_skus->sku = $data['sku'];
+        }
+        return $product_skus;
     }
 }

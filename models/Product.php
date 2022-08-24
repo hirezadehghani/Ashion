@@ -116,9 +116,6 @@ class Product extends Model
         $product->id = $data['id'];
         $product->title = $data['title'];
         $product->detail = $data['detail'];
-        $product->sku = $data['sku'];
-        $product->regular_price = $data['regular_price'];
-        $product->sale_price = $data['sale_price'];
         $product->promotions = $data['promotions'];
         $product->ranking = $data['ranking'];
         $product->pictures = $data['pictures'];
@@ -126,8 +123,6 @@ class Product extends Model
         $product->created_at = $data['created_at'];
         $product->modified_at = $data['modified_at'];
         $product->deleted_at = $data['deleted_at'];
-        $product->stock_id = $data['stock_id'];
-
         return $product;
     }
 

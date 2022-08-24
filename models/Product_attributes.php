@@ -48,4 +48,8 @@ class product_attributes extends Model
         if($this->attribute_name)
         parent::saveToDb($this->tableName(), $this->attributes());
     }
+
+    public function getValueName ($value_id) {
+        return $this->fetchRow("attribute_values", $value_id, ['value_name'], 'value_id');
+    }
 }

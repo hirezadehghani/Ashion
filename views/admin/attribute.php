@@ -1,5 +1,7 @@
 <script src="<?= $params['dependencyAddr'] ?>plugins/jquery/jquery.min.js"></script>
 <script src="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.min.js"></script>
+<script src="<?= $params['dependencyAddr'] ?>js/ntc.js"></script>
+
 <link rel="stylesheet" href="<?= $params['dependencyAddr'] ?>plugins/colorpicker/jquery.minicolors.css">
 <!-- Main content -->
 <section class="content">
@@ -126,8 +128,24 @@
     function setColorValue() {
         if(colorMode == true){
         let color = document.getElementById("color").value;
+        color = ntc.name(color);
         let attrValue = document.getElementById("value_name_input");
-        attrValue.value = color;
+        attrValue.value = color[1];
         }
     }
+
+    // // 1. You need a hex code of the color
+    // var ColorCode = "#008559";
+
+    // // 2. Rate the color using NTC
+    // var ntcMatch  = ntc.name(ColorCode);
+
+    // // 3. Handle the result. The library returns an array with the identified color.
+
+    // // 3.A RGB value of closest match e.g #01826B
+    // console.log(ntcMatch[0]);
+    // // Text string: Color name e.g "Deep Sea"
+    // console.log(ntcMatch[1]);
+    // // True if exact color match, a Boolean
+    // console.log(ntcMatch[2]);
 </script>

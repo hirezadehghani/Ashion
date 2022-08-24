@@ -44,7 +44,7 @@ class Product_stock extends Model
         parent::saveToDb($this->tableName, $this->attributes);
     }
 
-    public function getStockName($productId)  {
-        return $this->fetchRow("product_stock",$productId,['stock_name'], 'stock_id');
+    public function getStockName($stockId)  {
+        return $this->fetchRow("product_stock",$stockId,['stock_name'], 'stock_id');
     }
 }

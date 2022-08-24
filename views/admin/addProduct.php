@@ -7,7 +7,7 @@
 use app\models\Category;
 use app\models\Product;
 use app\models\product_attributes;
-            use app\models\sku_values;
+use app\models\sku_values;
 
 ?>
 <section class="content">
@@ -77,6 +77,8 @@ use app\models\product_attributes;
                     </div>
                     <div class="card-body">
                         <!-- continue of product form -->
+
+                        <!-- select product -->
                         <?php $form = \app\core\form\Form::begin('', 'get') ?>
                         <div class="form-group">
                             <select name="product_id" class="form-control">
@@ -88,6 +90,8 @@ use app\models\product_attributes;
                                 <?php } ?>
                             </select>
                         </div>
+                        <!-- ./ select product -->
+                        <!-- select attribute -->
                         <div class="form-group">
                             <label for="attributeSelect">انتخاب مشخصه</label>
                             <select class="form-group custom-select" multiple name="attribute_id[]" id="attributeSelect">
@@ -105,43 +109,69 @@ use app\models\product_attributes;
 
                             <?= $form->end() ?>
                         </div>
+                        <!-- ./select attribute -->
 
-
+                        <!-- select attribute values -->
                         <?php $attrForm = \app\core\form\Form::begin('', $_GET); ?>
                         <div class="form-group">
-                            <select name="value_id" class="form-control">
-                                <?php
-                                $attrs = [];
-                                $attrs = $_GET['attribute_id'];
-                                $productId = $_GET['product_id'];
-                                if (isset($attrs)) {
-                                    $attrs_vals = new product_attributes;
-                                    foreach ($attrs as $attr) {
-                                        $vals = $attrs_vals->fetchWhere("attribute_values", 'attribute_id', $attr);
-                                        foreach ($vals as $val) {
-                                ?>
-                                            <option value="<?= $val['value_id'] ?>"><?= $val['value_name'] ?> </option>
-                                <?php }
-                                    }
-                                } ?>
-                            </select>
-                            <input hidden type="number" value="<?= $attr ?>" name="attribute_id">
+                            <?php
+                            $attrs = [];
+                            $attrs = $_GET['attribute_id']; //array of attributes
+                            $parant_attribute = $attrs[0];
+                            $child_attribute = $attrs[1];
+                            $productId = $_GET['product_id'];
+                            if (isset($attrs)) {
+                                $attrs_vals = new product_attributes;
+                                $parent_values = $attrs_vals->fetchWhere("attribute_values", 'attribute_id', $parant_attribute);
+                                $child_values = $attrs_vals->fetchWhere("attribute_values", 'attribute_id', $child_attribute);
+                            ?>
+                                <div class="form-group">
+                                    <select name="parent_value_id" class="form-control">
+                                        <?php
+                                        foreach ($parent_values as $val) {
+                                        ?>
+                                            <option value="<?= $val['value_id'] ?>"><?= $val['value_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select name="child_value_id" class="form-control">
+                                        <?php
+                                        foreach ($child_values as $val) {
+                                        ?>
+                                            <option value="<?= $val['value_id'] ?>"><?= $val['value_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            <input hidden type="text" value="<?= $parant_attribute ?>" name="parent_attribute_id">
+                            <input hidden type="text" value="<?= $child_attribute ?>" name="child_attribute_id">
                             <input hidden type="number" value="<?= $productId ?>" name="product_id">
+                            <input hidden name="combination_string" type="text" value="" id="combination_input">
                             <button type="submit" class="btn btn-success">وارد کردن اطلاعات مشخصه</button>
-
-                            <?php $attrForm::end() ?>
+                            <?php
+                            $attrForm::end() ?>
                         </div>
+                        <!-- ./select attribute values -->
+
+                        <!-- set product_skus table values -->
                         <?php
-                        if (isset($_GET['attribute_id']) && isset($_GET['value_id'])) {
-                            $attr_id = $_GET['attribute_id'];
-                            $val_id = $_GET['value_id'];
+                        if (isset($_GET['parent_attribute_id'])) {
+                            $parent_attribute_id = $_GET['parent_attribute_id'];
+                            $parent_value_id = $_GET['parent_value_id'];
+                            $child_attribute_id = $_GET['child_attribute_id'];
+                            $child_value_id = $_GET['child_value_id'];
                             $product_id = $_GET['product_id'];
                             $attrForm = \app\core\form\Form::begin('', $_GET);
 
                         ?>
                             <!-- ATTRIBUTE VALUES FORM -->
-                            <input hidden name="attribute_id" type="text" value="<?= $attr_id ?>">
-                            <input hidden name="value_id" type="text" value="<?= $val_id ?>">
+                            <input hidden name="parent_attribute_id" type="text" value="<?= $parent_attribute_id ?>">
+                            <input hidden name="parent_value_id" type="text" value="<?= $parent_value_id ?>">
+                            <input hidden name="child_attribute_id" type="text" value="<?= $child_attribute_id ?>">
+                            <input hidden name="child_value_id" type="text" value="<?= $child_value_id ?>">
                             <input hidden name="product_id" type="text" value="<?= $product_id ?>">
                             <?= $attrForm->field($model, 'text', 'sku', 'کد sku') ?>
                             <?= $attrForm->field($model, 'number', 'regular_price', 'قیمت واقعی') ?>
@@ -156,11 +186,13 @@ use app\models\product_attributes;
                                 </select>
                             </div>
                             <!-- /. Stock -->
-
                         <?php }
                         ?>
                         <button type="submit" class="btn btn-primary">ذخیره</button>
+
                         <?php $attrForm::end() ?>
+                        <!-- ./set product_skus table values -->
+
                     </div>
                 </div>
             </div>

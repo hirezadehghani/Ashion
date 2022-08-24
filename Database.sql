@@ -70,11 +70,10 @@ create table if not exists shopping_session (
     user_id bigint DEFAULT null,
     guest_session_id varchar(100) DEFAULT null,
     total decimal(10) not null DEFAULT '0.00',
-    UNIQUE KEY `session_index` (`id`,`user_id`) USING BTREE,
+    UNIQUE KEY `session_index` (`id`, `user_id`) USING BTREE,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
-    CONSTRAINT `fk_shopping_user`
-        foreign key (user_id) references users(id)
+    CONSTRAINT `fk_shopping_user` foreign key (user_id) references users(id)
 );
 
 create table if not exists cart_item (
@@ -84,10 +83,8 @@ create table if not exists cart_item (
     quantity int not null,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
-    constraint  `fk_session_id`
-        foreign key (session_id) references shopping_session(id),
-    constraint `fk_product_id`
-        foreign key (product_id) references product(id)
+    constraint `fk_session_id` foreign key (session_id) references shopping_session(id),
+    constraint `fk_product_id` foreign key (product_id) references product(id)
 );
 
 create table if not exists order_details (
@@ -174,13 +171,17 @@ create table if not exists product_skus(
     constraint PK_product_skus primary key (product_id, sku_id)
 );
 
-create table if not exists sku_values   (
+create table if not exists sku_values (
     product_id bigint not null,
     sku_id bigint not null,
-    attribute_id bigint not null,
-    value_id bigint not null,
-    constraint PK_product_skus primary key (product_id, sku_id, attribute_id),
+    parent_attribute_id bigint not null,
+    parent_value_id bigint not null,
+    child_attribute_id bigint not null,
+    child_value_id bigint not null,
+    constraint PK_product_skus primary key (product_id, sku_id, parent_attribute_id),
     foreign key (product_id, sku_id) REFERENCES PRODUCT_SKUS (product_id, sku_id),
-    foreign key (product_id, attribute_id) REFERENCES product_attributes (product_id, attribute_id),
-    foreign key (product_id, attribute_id, value_id) REFERENCES attribute_values (product_id, attribute_id, value_id)
+    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, parent_attribute_id),
+    foreign key (product_id, child_attribute_id, child_value_id) REFERENCES attribute_values (product_id, child_attribute_id, child_value_id),
+    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, parent_attribute_id),
+    foreign key (product_id, child_attribute_id, child_value_id) REFERENCES attribute_values (product_id, child_attribute_id, child_value_id)
 );
