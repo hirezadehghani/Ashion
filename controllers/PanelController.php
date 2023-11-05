@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\Application;
-use app\models\product;
+use app\models\Product;
 use app\core\Request;
 use app\models\Category;
 use app\models\Discount;
@@ -95,7 +95,7 @@ class PanelController extends Controller
             'dependencyAddr' => '../',
             'model' => $discount
         ];
-
+;
         if ($request->isPost()) {
             $discount->loadData($request->getBody());
             if ($discount->validate() && $discount->save()) {

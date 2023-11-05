@@ -73,14 +73,15 @@ class User extends Model
                 self::RULES_UNIQUE, 'class' => self::class
             ]],
             'password' => [self::RULES_REQUIRED, [self::RULES_MIN, 'min' => 8]],
-            'passwordConfirm' => [[self::RULES_MATCH, 'match' => 'رمز عبور']],
+            'passwordConfirm' => [[self::RULES_MATCH, 'match' => 'password']],
         ];
     }
     }
 
     public function save()
     {
-        parent::saveToDb($this->tableName, $this->attributes);
+        self::setDates();
+        parent::saveToDb($this->tableName(), $this->attributes());
     }
 
     public function getDisplayName(): string
@@ -102,5 +103,11 @@ class User extends Model
             $this->addError('email', self::RULES_UNCORRECT);
         }
         return 0;
+    }
+
+    public function setDates()
+    {
+        $this->created_at = Date("Y:m:d H:i:s");
+        $this->modified_at = Date("Y:m:d H:i:s");
     }
 }

@@ -1,4 +1,7 @@
+DROP DATABASE IF EXISTS `ashion`;
 CREATE SCHEMA `ashion` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+use `ashion`;
 
 create table if not exists product_category(
     id bigint not null primary key AUTO_INCREMENT,
@@ -28,6 +31,11 @@ create table if not exists discount (
     deleted_at datetime null DEFAULT null
 );
 
+create table if not exists product_stock(
+    stock_id int not null primary key AUTO_INCREMENT,
+    stock_name varchar(20) not null
+);
+
 create table if not exists product (
     id bigint not null AUTO_INCREMENT PRIMARY KEY,
     title varchar(75) not null unique,
@@ -42,16 +50,13 @@ create table if not exists product (
     modified_at datetime null DEFAULT null,
     deleted_at datetime null DEFAULT null,
     category_id bigint not null,
+    inventory_id bigint not null,
+    discount_id bigint not null,
     stock_id int DEFAULT 1,
     foreign key (category_id) references product_category(id),
     foreign key (inventory_id) references product_inventory(id),
     foreign key (discount_id) references discount(id),
-    foreign key (stock_id) references product_stock(id)
-);
-
-create table if not exists product_stock(
-    stock_id int not null primary key AUTO_INCREMENT,
-    stock_name varchar(20) not null
+    foreign key (stock_id) references product_stock(stock_id)
 );
 
 create table if not exists user (
@@ -73,7 +78,7 @@ create table if not exists shopping_session (
     UNIQUE KEY `session_index` (`id`, `user_id`) USING BTREE,
     created_at datetime not null,
     modified_at datetime null DEFAULT null,
-    CONSTRAINT `fk_shopping_user` foreign key (user_id) references users(id)
+    CONSTRAINT `fk_shopping_user` foreign key (id) references user(id)
 );
 
 create table if not exists cart_item (
@@ -87,6 +92,16 @@ create table if not exists cart_item (
     constraint `fk_product_id` foreign key (product_id) references product(id)
 );
 
+create table if not exists peyment_details (
+    id bigint not null AUTO_INCREMENT primary key,
+    order_id bigint not null,
+    amount int not null,
+    providers varchar(20) not null,
+    stat boolean,
+    created_at datetime not null,
+    modified_at datetime null DEFAULT null
+);
+
 create table if not exists order_details (
     id bigint not null AUTO_INCREMENT primary key,
     user_id bigint not null,
@@ -98,16 +113,7 @@ create table if not exists order_details (
     foreign key (peyment_id) references peyment_details(id)
 );
 
-create table if not exists peyment_details (
-    id bigint not null AUTO_INCREMENT primary key,
-    order_id bigint not null,
-    amount int not null,
-    providers varchar(20) not null,
-    stat boolean,
-    created_at datetime not null,
-    modified_at datetime null DEFAULT null,
-    foreign key (order_id) references order_details(id)
-);
+ALTER table peyment_details ADD CONSTRAINT fk_order foreign key (order_id) references order_details(id);
 
 create table if not exists order_items (
     id bigint not null AUTO_INCREMENT primary key,
@@ -154,20 +160,20 @@ create table if not exists attribute_values(
     product_id bigint null,
     attribute_id bigint not null,
     foreign key (product_id) references product(id),
-    foreign key (attribute_id) references product_attributes(id),
+    foreign key (attribute_id) references product_attributes(attribute_id),
     constraint PK_attribute_value primary key (value_id, attribute_id)
 );
 
 create table if not exists product_skus(
     product_id bigint not null,
-    sku_id bigint not null AUTO_INCREMENT,
+    sku_id bigint not null,
     sku varchar(100) not null unique,
     regular_price float not null,
     sale_price float not null,
     quantity bigint not null,
     stock_id int DEFAULT 1,
     foreign key (product_id) references product(id),
-    foreign key (stock_id) references product_stock(id),
+    foreign key (stock_id) references product_stock(stock_id),
     constraint PK_product_skus primary key (product_id, sku_id)
 );
 
@@ -179,9 +185,8 @@ create table if not exists sku_values (
     child_attribute_id bigint not null,
     child_value_id bigint not null,
     constraint PK_product_skus primary key (product_id, sku_id, parent_attribute_id),
-    foreign key (product_id, sku_id) REFERENCES PRODUCT_SKUS (product_id, sku_id),
-    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, parent_attribute_id),
-    foreign key (product_id, child_attribute_id, child_value_id) REFERENCES attribute_values (product_id, child_attribute_id, child_value_id),
-    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, parent_attribute_id),
-    foreign key (product_id, child_attribute_id, child_value_id) REFERENCES attribute_values (product_id, child_attribute_id, child_value_id)
+    foreign key (product_id, sku_id) REFERENCES product_skus (product_id, sku_id),
+    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, attribute_id),
+    foreign key (product_id, child_attribute_id, child_value_id) REFERENCES attribute_values (product_id, attribute_id, value_id),
+    foreign key (product_id, parent_attribute_id) REFERENCES product_attributes (product_id, attribute_id)
 );
